@@ -3,103 +3,267 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AskReza - Experiments & Prototypes</title>
-  <meta name="description" content="A collection of experiments, prototypes, and projects by Reza">
+  <title>AskReza — AI Whisperer</title>
+  <meta name="description" content="AI Whisperer. Solving problems with technology.">
 
   <!-- Open Graph -->
   <meta property="og:title" content="AskReza">
-  <meta property="og:description" content="A collection of experiments, prototypes, and projects by Reza">
+  <meta property="og:description" content="AI Whisperer. Solving problems with technology.">
   <meta property="og:type" content="website">
 
-  <!-- Tailwind CSS via CDN -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          fontFamily: {
-            sans: ['Inter', 'system-ui', 'sans-serif'],
-          },
-        }
-      }
-    }
-  </script>
-
-  <!-- Inter font -->
+  <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg: #0a0a0a;
+      --fg: #e8e8e8;
+      --muted: #666;
+      --accent: #c4f864;
+      --serif: 'Instrument Serif', Georgia, serif;
+      --mono: 'JetBrains Mono', monospace;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      font-size: 18px;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--fg);
+      font-family: var(--mono);
+      font-weight: 300;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+    }
+
+    /* Subtle grid background */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+      background-size: 60px 60px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Ambient glow */
+    .glow {
+      position: fixed;
+      width: 600px;
+      height: 600px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(196, 248, 100, 0.08) 0%, transparent 70%);
+      top: 20%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+      z-index: 0;
+      animation: drift 20s ease-in-out infinite;
+    }
+
+    @keyframes drift {
+      0%, 100% { transform: translate(-50%, -50%) scale(1); }
+      50% { transform: translate(-40%, -40%) scale(1.1); }
+    }
+
+    main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 4rem 2rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .container {
+      max-width: 720px;
+      width: 100%;
+    }
+
+    /* Header */
+    header {
+      margin-bottom: 4rem;
+      animation: fadeUp 1s ease-out;
+    }
+
+    .title {
+      font-family: var(--serif);
+      font-size: clamp(3.5rem, 12vw, 7rem);
+      font-weight: 400;
+      line-height: 0.95;
+      letter-spacing: -0.03em;
+      margin-bottom: 0.5rem;
+    }
+
+    .title span {
+      color: var(--muted);
+      font-style: italic;
+    }
+
+    .cursor {
+      display: inline-block;
+      width: 3px;
+      height: 0.8em;
+      background: var(--accent);
+      margin-left: 0.1em;
+      animation: blink 1s step-end infinite;
+      vertical-align: baseline;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
+    }
+
+    /* Tagline */
+    .tagline {
+      font-size: 0.85rem;
+      color: var(--muted);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      margin-top: 1.5rem;
+      animation: fadeUp 1s ease-out 0.2s backwards;
+    }
+
+    /* Description */
+    .description {
+      font-family: var(--serif);
+      font-size: 1.5rem;
+      line-height: 1.6;
+      color: var(--fg);
+      margin-bottom: 3rem;
+      animation: fadeUp 1s ease-out 0.4s backwards;
+    }
+
+    .description em {
+      color: var(--accent);
+      font-style: italic;
+    }
+
+    /* Prompt line */
+    .prompt {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1.5rem 0;
+      border-top: 1px solid rgba(255,255,255,0.1);
+      animation: fadeUp 1s ease-out 0.6s backwards;
+    }
+
+    .prompt-symbol {
+      color: var(--accent);
+      font-size: 1rem;
+    }
+
+    .prompt-text {
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .prompt a {
+      color: var(--fg);
+      text-decoration: none;
+      border-bottom: 1px solid var(--muted);
+      transition: border-color 0.3s, color 0.3s;
+    }
+
+    .prompt a:hover {
+      color: var(--accent);
+      border-color: var(--accent);
+    }
+
+    /* Footer */
+    footer {
+      padding: 2rem;
+      text-align: center;
+      font-size: 0.75rem;
+      color: var(--muted);
+      letter-spacing: 0.1em;
+      position: relative;
+      z-index: 1;
+      animation: fadeUp 1s ease-out 0.8s backwards;
+    }
+
+    footer a {
+      color: var(--muted);
+      text-decoration: none;
+      margin: 0 1rem;
+      transition: color 0.3s;
+    }
+
+    footer a:hover {
+      color: var(--accent);
+    }
+
+    /* Animations */
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Mobile adjustments */
+    @media (max-width: 600px) {
+      html { font-size: 16px; }
+      main { padding: 3rem 1.5rem; }
+      header { margin-bottom: 3rem; }
+      .glow { width: 300px; height: 300px; }
+    }
+  </style>
 </head>
-<body class="min-h-screen bg-white text-gray-900 font-sans antialiased">
+<body>
 
-  <main class="container mx-auto px-6 py-24 max-w-4xl">
-    <!-- Hero -->
-    <div class="text-center mb-16 space-y-6">
-      <h1 class="text-5xl sm:text-6xl font-bold tracking-tight">
-        Ask<span class="text-gray-400">Reza</span>
-      </h1>
-      <p class="text-xl text-gray-600 max-w-2xl mx-auto">
-        A collection of experiments, prototypes, and side projects.
-        <br>
-        Building things to learn and explore.
+  <div class="glow"></div>
+
+  <main>
+    <div class="container">
+      <header>
+        <h1 class="title">
+          Ask<span>Reza</span><span class="cursor"></span>
+        </h1>
+        <p class="tagline">AI Whisperer · Problem Solver</p>
+      </header>
+
+      <p class="description">
+        I speak to machines so you don't have to.<br>
+        Building at the intersection of <em>human intent</em> and <em>artificial intelligence</em>.
       </p>
+
+      <div class="prompt">
+        <span class="prompt-symbol">→</span>
+        <span class="prompt-text">
+          Have a problem? <a href="mailto:your@email.com">Let's talk</a>
+        </span>
+      </div>
     </div>
-
-    <!-- Projects Grid -->
-    <section id="projects" class="mb-24">
-      <!-- Empty state - shown when no projects -->
-      <div class="text-center py-12 border border-dashed border-gray-300 rounded-lg">
-        <p class="text-gray-500">Projects coming soon...</p>
-      </div>
-
-      <!--
-      Uncomment and duplicate this card when you have projects:
-
-      <h2 class="text-2xl font-semibold text-center mb-8">Projects</h2>
-      <div class="grid gap-6 sm:grid-cols-2">
-        <a href="https://voiceai.askreza.com" class="block group">
-          <div class="h-full p-6 border border-gray-200 rounded-lg transition-all hover:shadow-lg hover:border-gray-400">
-            <div class="flex items-center justify-between mb-2">
-              <h3 class="text-lg font-semibold">Voice AI</h3>
-            </div>
-            <p class="text-gray-600">Conversational AI with voice synthesis</p>
-          </div>
-        </a>
-
-        <div class="block opacity-60">
-          <div class="h-full p-6 border border-gray-200 rounded-lg">
-            <div class="flex items-center justify-between mb-2">
-              <h3 class="text-lg font-semibold">Data Viz</h3>
-              <span class="text-xs bg-gray-100 px-2 py-1 rounded-full text-gray-500">Soon</span>
-            </div>
-            <p class="text-gray-600">Interactive data visualization experiments</p>
-          </div>
-        </div>
-      </div>
-      -->
-    </section>
-
-    <!-- Footer -->
-    <footer class="pt-8 border-t border-gray-200 text-center">
-      <div class="flex items-center justify-center gap-6 mb-4">
-        <a href="https://github.com/yourusername" target="_blank" rel="noopener noreferrer"
-           class="text-gray-600 hover:text-gray-900 transition-colors">
-          GitHub
-        </a>
-        <a href="https://twitter.com/yourusername" target="_blank" rel="noopener noreferrer"
-           class="text-gray-600 hover:text-gray-900 transition-colors">
-          Twitter
-        </a>
-        <a href="mailto:your@email.com"
-           class="text-gray-600 hover:text-gray-900 transition-colors">
-          Contact
-        </a>
-      </div>
-      <p class="text-sm text-gray-500">
-        Built with curiosity.
-      </p>
-    </footer>
   </main>
+
+  <footer>
+    <a href="https://github.com/yourusername" target="_blank" rel="noopener noreferrer">GitHub</a>
+    <a href="https://twitter.com/yourusername" target="_blank" rel="noopener noreferrer">Twitter</a>
+    <a href="https://linkedin.com/in/yourusername" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+  </footer>
 
 </body>
 </html>
