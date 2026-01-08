@@ -225,26 +225,20 @@
       }
     }
 
-    /* Custom cursor */
-    .custom-cursor {
+    /* Mouse grid glow - illuminates grid lines near cursor */
+    .grid-glow {
       position: fixed;
-      width: 8px;
-      height: 8px;
-      background: var(--accent);
-      border-radius: 50%;
+      width: 300px;
+      height: 300px;
       pointer-events: none;
-      z-index: 9999;
-      transition: transform 0.15s ease-out, opacity 0.15s;
-      mix-blend-mode: difference;
-    }
-
-    .custom-cursor.hovering {
-      transform: scale(4);
-      opacity: 0.8;
-    }
-
-    *, *::before, *::after {
-      cursor: none !important;
+      z-index: 1;
+      transform: translate(-50%, -50%);
+      background-image:
+        linear-gradient(rgba(196, 248, 100, 0.15) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(196, 248, 100, 0.15) 1px, transparent 1px);
+      background-size: 60px 60px;
+      mask-image: radial-gradient(circle, black 0%, transparent 70%);
+      -webkit-mask-image: radial-gradient(circle, black 0%, transparent 70%);
     }
 
     /* Top bar */
@@ -290,8 +284,7 @@
       main { padding: 2rem 1.5rem; }
       header { margin-bottom: 2rem; }
       .glow { width: 300px; height: 300px; }
-      .custom-cursor { display: none; }
-      body, a, button { cursor: auto; }
+      .grid-glow { display: none; }
       .description { margin-bottom: 2rem; }
     }
   </style>
@@ -299,7 +292,7 @@
 <body>
 
   <div class="glow"></div>
-  <div class="custom-cursor"></div>
+  <div class="grid-glow"></div>
 
   <div class="top-bar">
     <span class="datetime" id="datetime"></span>
@@ -348,18 +341,16 @@
   </footer>
 
   <script>
-    // Custom cursor
-    const cursor = document.querySelector('.custom-cursor');
+    // Grid glow follows mouse - syncs grid lines with page grid
+    const gridGlow = document.querySelector('.grid-glow');
 
     document.addEventListener('mousemove', (e) => {
-      cursor.style.left = e.clientX - 4 + 'px';
-      cursor.style.top = e.clientY - 4 + 'px';
-    });
-
-    // Cursor hover effect on links
-    document.querySelectorAll('a, button').forEach(el => {
-      el.addEventListener('mouseenter', () => cursor.classList.add('hovering'));
-      el.addEventListener('mouseleave', () => cursor.classList.remove('hovering'));
+      const x = e.clientX;
+      const y = e.clientY;
+      gridGlow.style.left = x + 'px';
+      gridGlow.style.top = y + 'px';
+      // Offset background to align with page grid
+      gridGlow.style.backgroundPosition = `${-x % 60}px ${-y % 60}px`;
     });
 
     console.log(`
