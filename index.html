@@ -63,24 +63,18 @@
       z-index: 0;
     }
 
-    /* Ambient glow */
+    /* Ambient glow - follows mouse */
     .glow {
       position: fixed;
       width: 600px;
       height: 600px;
       border-radius: 50%;
       background: radial-gradient(circle, rgba(196, 248, 100, 0.08) 0%, transparent 70%);
-      top: 20%;
-      left: 50%;
-      transform: translate(-50%, -50%);
+      top: 0;
+      left: 0;
       pointer-events: none;
       z-index: 0;
-      animation: drift 20s ease-in-out infinite;
-    }
-
-    @keyframes drift {
-      0%, 100% { transform: translate(-50%, -50%) scale(1); }
-      50% { transform: translate(-40%, -40%) scale(1.1); }
+      transition: transform 0.3s ease-out;
     }
 
     main {
@@ -276,6 +270,20 @@
   </footer>
 
   <script>
+    // Glow follows mouse
+    const glow = document.querySelector('.glow');
+    let mouseX = window.innerWidth / 2;
+    let mouseY = window.innerHeight / 3;
+
+    document.addEventListener('mousemove', (e) => {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+      glow.style.transform = `translate(${mouseX - 300}px, ${mouseY - 300}px)`;
+    });
+
+    // Set initial position
+    glow.style.transform = `translate(${mouseX - 300}px, ${mouseY - 300}px)`;
+
     console.log(`
 %c👀 Oh, peeking under the hood?
 
