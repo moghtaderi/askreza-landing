@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AskReza - Experiments & Prototypes</title>
+  <meta name="description" content="A collection of experiments, prototypes, and projects by Reza">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="AskReza">
+  <meta property="og:description" content="A collection of experiments, prototypes, and projects by Reza">
+  <meta property="og:type" content="website">
+
+  <!-- Tailwind CSS via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+          },
+        }
+      }
+    }
+  </script>
+
+  <!-- Inter font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="min-h-screen bg-white text-gray-900 font-sans antialiased">
+
+  <main class="container mx-auto px-6 py-24 max-w-4xl">
+    <!-- Hero -->
+    <div class="text-center mb-16 space-y-6">
+      <h1 class="text-5xl sm:text-6xl font-bold tracking-tight">
+        Ask<span class="text-gray-400">Reza</span>
+      </h1>
+      <p class="text-xl text-gray-600 max-w-2xl mx-auto">
+        A collection of experiments, prototypes, and side projects.
+        <br>
+        Building things to learn and explore.
+      </p>
+    </div>
+
+    <!-- Projects Grid -->
+    <section id="projects" class="mb-24">
+      <!-- Empty state - shown when no projects -->
+      <div class="text-center py-12 border border-dashed border-gray-300 rounded-lg">
+        <p class="text-gray-500">Projects coming soon...</p>
+      </div>
+
+      <!--
+      Uncomment and duplicate this card when you have projects:
+
+      <h2 class="text-2xl font-semibold text-center mb-8">Projects</h2>
+      <div class="grid gap-6 sm:grid-cols-2">
+        <a href="https://voiceai.askreza.com" class="block group">
+          <div class="h-full p-6 border border-gray-200 rounded-lg transition-all hover:shadow-lg hover:border-gray-400">
+            <div class="flex items-center justify-between mb-2">
+              <h3 class="text-lg font-semibold">Voice AI</h3>
+            </div>
+            <p class="text-gray-600">Conversational AI with voice synthesis</p>
+          </div>
+        </a>
+
+        <div class="block opacity-60">
+          <div class="h-full p-6 border border-gray-200 rounded-lg">
+            <div class="flex items-center justify-between mb-2">
+              <h3 class="text-lg font-semibold">Data Viz</h3>
+              <span class="text-xs bg-gray-100 px-2 py-1 rounded-full text-gray-500">Soon</span>
+            </div>
+            <p class="text-gray-600">Interactive data visualization experiments</p>
+          </div>
+        </div>
+      </div>
+      -->
+    </section>
+
+    <!-- Footer -->
+    <footer class="pt-8 border-t border-gray-200 text-center">
+      <div class="flex items-center justify-center gap-6 mb-4">
+        <a href="https://github.com/yourusername" target="_blank" rel="noopener noreferrer"
+           class="text-gray-600 hover:text-gray-900 transition-colors">
+          GitHub
+        </a>
+        <a href="https://twitter.com/yourusername" target="_blank" rel="noopener noreferrer"
+           class="text-gray-600 hover:text-gray-900 transition-colors">
+          Twitter
+        </a>
+        <a href="mailto:your@email.com"
+           class="text-gray-600 hover:text-gray-900 transition-colors">
+          Contact
+        </a>
+      </div>
+      <p class="text-sm text-gray-500">
+        Built with curiosity.
+      </p>
+    </footer>
+  </main>
+
+</body>
+</html>
