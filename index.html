@@ -407,9 +407,9 @@ The human occasionally said "nice."
     let lastBtcPrice = null;
     async function fetchBtcPrice() {
       try {
-        const res = await fetch('https://api.binance.com/api/v3/ticker/price?symbol=BTCUSDT');
+        const res = await fetch('https://api.coinbase.com/v2/prices/BTC-USD/spot');
         const data = await res.json();
-        const price = parseFloat(data.price);
+        const price = parseFloat(data.data.amount);
         const priceEl = document.getElementById('btc-price');
         priceEl.textContent = `BTC: $${Math.round(price).toLocaleString()}`;
 
