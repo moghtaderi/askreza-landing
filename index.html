@@ -407,9 +407,9 @@ The human occasionally said "nice."
     let lastBtcPrice = null;
     async function fetchBtcPrice() {
       try {
-        const res = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd');
+        const res = await fetch('https://api.binance.com/api/v3/ticker/price?symbol=BTCUSDT');
         const data = await res.json();
-        const price = data.bitcoin.usd;
+        const price = parseFloat(data.price);
         const priceEl = document.getElementById('btc-price');
         priceEl.textContent = `BTC: $${Math.round(price).toLocaleString()}`;
 
@@ -424,7 +424,7 @@ The human occasionally said "nice."
       }
     }
     fetchBtcPrice();
-    setInterval(fetchBtcPrice, 15000);
+    setInterval(fetchBtcPrice, 30000);
   </script>
 
 </body>
