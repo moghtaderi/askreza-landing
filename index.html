@@ -277,6 +277,877 @@
       color: var(--accent);
     }
 
+    .datetime {
+      cursor: pointer;
+    }
+
+    .datetime:hover {
+      color: var(--accent);
+    }
+
+    /* Time Zone Modal */
+    .tz-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(8px);
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.3s, visibility 0.3s;
+    }
+
+    .tz-overlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .tz-modal {
+      background: var(--bg);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      width: 95%;
+      max-width: 900px;
+      max-height: 90vh;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      animation: modalSlideUp 0.3s ease-out;
+    }
+
+    @keyframes modalSlideUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .tz-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.25rem 1.5rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .tz-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .tz-logo svg {
+      flex-shrink: 0;
+    }
+
+    .tz-title {
+      font-family: var(--serif);
+      font-size: 1.25rem;
+      color: var(--fg);
+    }
+
+    .tz-close {
+      background: none;
+      border: none;
+      color: var(--muted);
+      font-size: 1.5rem;
+      cursor: pointer;
+      padding: 0.25rem;
+      line-height: 1;
+      transition: color 0.3s;
+    }
+
+    .tz-close:hover {
+      color: var(--fg);
+    }
+
+    .tz-controls {
+      display: flex;
+      gap: 1rem;
+      padding: 1rem 1.5rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .tz-search-container {
+      position: relative;
+      flex: 1;
+      min-width: 200px;
+    }
+
+    .tz-search {
+      width: 100%;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 6px;
+      padding: 0.6rem 1rem;
+      padding-left: 2.5rem;
+      color: var(--fg);
+      font-family: var(--mono);
+      font-size: 0.85rem;
+      outline: none;
+      transition: border-color 0.3s;
+    }
+
+    .tz-search::placeholder {
+      color: var(--muted);
+    }
+
+    .tz-search:focus {
+      border-color: var(--accent);
+    }
+
+    .tz-search-icon {
+      position: absolute;
+      left: 0.85rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .tz-suggestions {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      background: #151515;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 6px;
+      margin-top: 4px;
+      max-height: 200px;
+      overflow-y: auto;
+      z-index: 10;
+      display: none;
+    }
+
+    .tz-suggestions.active {
+      display: block;
+    }
+
+    .tz-suggestion {
+      padding: 0.75rem 1rem;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: background 0.2s;
+    }
+
+    .tz-suggestion:hover {
+      background: rgba(196, 248, 100, 0.1);
+    }
+
+    .tz-suggestion-city {
+      color: var(--fg);
+      font-size: 0.85rem;
+    }
+
+    .tz-suggestion-info {
+      color: var(--muted);
+      font-size: 0.75rem;
+    }
+
+    /* Custom Date Picker */
+    .tz-date-picker {
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 6px;
+      padding: 0.25rem;
+    }
+
+    .tz-date-btn {
+      background: none;
+      border: none;
+      color: var(--muted);
+      width: 28px;
+      height: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      border-radius: 4px;
+      transition: all 0.2s;
+      font-size: 1rem;
+    }
+
+    .tz-date-btn:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--fg);
+    }
+
+    .tz-date-display {
+      padding: 0.35rem 0.75rem;
+      color: var(--fg);
+      font-family: var(--mono);
+      font-size: 0.8rem;
+      min-width: 100px;
+      text-align: center;
+    }
+
+    .tz-date-today {
+      font-size: 0.7rem;
+      color: var(--bg);
+      background: var(--accent);
+      padding: 0.25rem 0.6rem;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: 500;
+      transition: all 0.15s ease;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .tz-date-today:hover {
+      background: #fff;
+      transform: scale(1.05);
+    }
+
+    .tz-date-display {
+      cursor: pointer;
+    }
+
+    .tz-date-display:hover {
+      color: var(--accent);
+    }
+
+    /* Calendar Dropdown */
+    .tz-calendar-wrapper {
+      position: relative;
+    }
+
+    .tz-calendar {
+      display: none;
+      position: absolute;
+      top: 100%;
+      right: 0;
+      margin-top: 0.5rem;
+      background: var(--bg);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 8px;
+      padding: 0.75rem;
+      z-index: 1000;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+      min-width: 280px;
+    }
+
+    .tz-calendar.active {
+      display: block;
+    }
+
+    .tz-calendar-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 0.75rem;
+    }
+
+    .tz-calendar-title {
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: var(--fg);
+    }
+
+    .tz-calendar-nav {
+      display: flex;
+      gap: 0.25rem;
+    }
+
+    .tz-calendar-nav button {
+      background: none;
+      border: none;
+      color: var(--muted);
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      border-radius: 4px;
+      font-size: 0.9rem;
+    }
+
+    .tz-calendar-nav button:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--fg);
+    }
+
+    .tz-calendar-weekdays {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 2px;
+      margin-bottom: 0.25rem;
+    }
+
+    .tz-calendar-weekday {
+      text-align: center;
+      font-size: 0.6rem;
+      color: var(--muted);
+      padding: 0.25rem;
+      text-transform: uppercase;
+    }
+
+    .tz-calendar-days {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 2px;
+    }
+
+    .tz-calendar-day {
+      aspect-ratio: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      color: var(--muted);
+      cursor: pointer;
+      border-radius: 4px;
+      transition: all 0.15s;
+    }
+
+    .tz-calendar-day:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--fg);
+    }
+
+    .tz-calendar-day.other-month {
+      opacity: 0.3;
+    }
+
+    .tz-calendar-day.today {
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    .tz-calendar-day.selected {
+      background: var(--accent);
+      color: var(--bg);
+      font-weight: 600;
+    }
+
+    .tz-calendar-day.selected:hover {
+      background: var(--accent);
+      color: var(--bg);
+    }
+
+    /* Selection Info Bar */
+    .tz-selection-info {
+      display: none;
+      align-items: center;
+      gap: 1rem;
+      padding: 0.6rem 1.5rem;
+      background: rgba(255, 255, 255, 0.03);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
+    .tz-selection-info.active {
+      display: flex;
+    }
+
+    .tz-selection-duration {
+      color: var(--fg);
+      font-weight: 500;
+      font-size: 0.9rem;
+    }
+
+    .tz-time-input {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 4px;
+      color: var(--fg);
+      font-family: var(--mono);
+      font-size: 0.8rem;
+      padding: 0.25rem 0.4rem;
+      width: 70px;
+      text-align: center;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .tz-time-input:focus {
+      border-color: var(--accent);
+    }
+
+    .tz-time-separator {
+      color: var(--muted);
+      margin: 0 0.25rem;
+    }
+
+    .tz-selection-actions {
+      display: flex;
+      gap: 0.5rem;
+      margin-left: auto;
+    }
+
+    .tz-btn {
+      background: none;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 4px;
+      color: var(--muted);
+      padding: 0.3rem 0.6rem;
+      font-size: 0.7rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: var(--mono);
+    }
+
+    .tz-btn:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .tz-btn.primary {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: var(--bg);
+    }
+
+    .tz-btn.primary:hover {
+      background: #d4ff84;
+    }
+
+    .tz-copy-toast {
+      position: fixed;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--accent);
+      color: var(--bg);
+      padding: 0.75rem 1.5rem;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      opacity: 0;
+      transition: opacity 0.3s;
+      z-index: 200;
+    }
+
+    .tz-copy-toast.show {
+      opacity: 1;
+    }
+
+    .tz-cities {
+      flex: 1;
+      overflow-y: auto;
+      padding: 1rem 0;
+    }
+
+    .tz-city-row {
+      display: flex;
+      padding: 0.75rem 2.5rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      align-items: center;
+      gap: 1rem;
+      position: relative;
+    }
+
+    .tz-city-row:last-child {
+      border-bottom: none;
+    }
+
+    .tz-city-row:hover {
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .tz-city-info {
+      display: flex;
+      flex-direction: column;
+      gap: 0.15rem;
+      width: 150px;
+      min-width: 150px;
+      flex-shrink: 0;
+    }
+
+    .tz-city-header {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      margin-bottom: 0.25rem;
+    }
+
+    .tz-city-name {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      font-size: 0.95rem;
+      font-weight: 500;
+      color: var(--fg);
+      letter-spacing: -0.01em;
+      cursor: pointer;
+    }
+
+    .tz-city-name:hover {
+      color: var(--accent);
+    }
+
+    .tz-city-offset {
+      font-size: 0.65rem;
+      color: #888;
+      background: rgba(255, 255, 255, 0.08);
+      padding: 0.1rem 0.3rem;
+      border-radius: 3px;
+    }
+
+    .tz-city-time-line {
+      font-family: var(--mono);
+      font-size: 0.8rem;
+      color: var(--muted);
+      white-space: nowrap;
+    }
+
+    .tz-city-date-line {
+      font-size: 0.7rem;
+      color: #666;
+      white-space: nowrap;
+    }
+
+    .tz-city-current {
+      min-height: 28px;
+    }
+
+    .tz-city-selection {
+      display: none;
+      min-height: 28px;
+    }
+
+    .tz-city-selection.active {
+      display: block;
+    }
+
+    .tz-selection-time {
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      color: var(--accent);
+      white-space: nowrap;
+    }
+
+    .tz-selection-date {
+      font-size: 0.55rem;
+      color: #555;
+      white-space: nowrap;
+    }
+
+    .tz-selection-date.crosses-day {
+      color: var(--accent);
+      font-weight: 500;
+    }
+
+    .tz-city-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+      margin-top: 0.1rem;
+    }
+
+    .tz-city-remove {
+      background: none;
+      border: none;
+      color: var(--muted);
+      cursor: pointer;
+      font-size: 1.1rem;
+      opacity: 0;
+      transition: opacity 0.2s, color 0.2s;
+      padding: 0.2rem 0.4rem;
+      line-height: 1;
+    }
+
+    .tz-city-row:hover .tz-city-remove {
+      opacity: 1;
+    }
+
+    .tz-city-remove:hover {
+      color: #ff6b6b;
+    }
+
+    .tz-set-home {
+      background: none;
+      border: none;
+      color: var(--muted);
+      cursor: pointer;
+      font-size: 0.85rem;
+      opacity: 0;
+      transition: opacity 0.2s, color 0.2s;
+      padding: 0.15rem 0.3rem;
+      line-height: 1;
+    }
+
+    .tz-city-row:hover .tz-set-home {
+      opacity: 0.6;
+    }
+
+    .tz-set-home:hover {
+      color: var(--accent);
+      opacity: 1;
+    }
+
+    .tz-home-icon {
+      color: var(--accent);
+      font-size: 0.85rem;
+    }
+
+    .tz-timeline-container {
+      flex: 1;
+      min-width: 0;
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .tz-timeline {
+      display: flex;
+      gap: 2px;
+      flex: 1;
+      min-width: 0;
+    }
+
+    .tz-day-markers {
+      position: absolute;
+      top: -2px;
+      left: 0;
+      right: 0;
+      height: 0;
+      pointer-events: none;
+      z-index: 5;
+    }
+
+    .tz-shift-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 22px;
+      height: 22px;
+      background: rgba(196, 248, 100, 0.15);
+      border: 1px solid rgba(196, 248, 100, 0.3);
+      border-radius: 50%;
+      color: var(--accent);
+      cursor: pointer;
+      opacity: 0;
+      transition: opacity 0.2s, background 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10;
+      padding: 0;
+    }
+
+    .tz-shift-btn.tz-shift-left {
+      left: -28px;
+    }
+
+    .tz-shift-btn.tz-shift-right {
+      right: -28px;
+    }
+
+    .tz-city-row:hover .tz-shift-btn {
+      opacity: 1;
+    }
+
+    .tz-shift-btn:hover {
+      background: rgba(196, 248, 100, 0.3);
+    }
+
+    .tz-hour {
+      flex: 1;
+      min-width: 0;
+      height: 44px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.15s;
+      user-select: none;
+      position: relative;
+      border: 2px solid transparent;
+    }
+
+    .tz-hour-time {
+      line-height: 1;
+      font-weight: 500;
+      font-size: 0.7rem;
+    }
+
+    .tz-hour-period {
+      font-size: 0.45rem;
+      opacity: 0.7;
+      margin-top: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.02em;
+    }
+
+    .tz-hour.day {
+      background: rgba(255, 200, 120, 0.18);
+      color: var(--fg);
+    }
+
+    .tz-hour.night {
+      background: rgba(255, 255, 255, 0.03);
+      color: var(--muted);
+    }
+
+    .tz-hour.work {
+      background: rgba(100, 200, 130, 0.22);
+      color: var(--fg);
+    }
+
+    .tz-hour:hover {
+      background: rgba(196, 248, 100, 0.15);
+      border-color: rgba(196, 248, 100, 0.2);
+    }
+
+    /* Half-cell hover indicator */
+    .tz-hour::before,
+    .tz-hour::after {
+      content: '';
+      position: absolute;
+      top: 2px;
+      bottom: 2px;
+      width: calc(50% - 3px);
+      border-radius: 2px;
+      opacity: 0;
+      transition: opacity 0.1s;
+      pointer-events: none;
+    }
+
+    .tz-hour::before {
+      left: 2px;
+    }
+
+    .tz-hour::after {
+      right: 2px;
+    }
+
+    .tz-hour.hover-left::before {
+      background: rgba(196, 248, 100, 0.3);
+      opacity: 1;
+    }
+
+    .tz-hour.hover-right::after {
+      background: rgba(196, 248, 100, 0.3);
+      opacity: 1;
+    }
+
+    /* Half-cell selection indicator */
+    .tz-hour.selected-left::before {
+      background: rgba(196, 248, 100, 0.5);
+      opacity: 1;
+    }
+
+    .tz-hour.selected-right::after {
+      background: rgba(196, 248, 100, 0.5);
+      opacity: 1;
+    }
+
+    /* Full cell selection - no pseudo-elements, just highlight the whole cell */
+    .tz-hour.selected-full {
+      background: rgba(196, 248, 100, 0.45) !important;
+    }
+
+    /* Selection styling - VERY distinct */
+    .tz-hour.selected {
+      background: rgba(196, 248, 100, 0.35);
+      border-color: var(--accent);
+      box-shadow: 0 0 12px rgba(196, 248, 100, 0.5), inset 0 0 8px rgba(196, 248, 100, 0.2);
+      color: var(--fg);
+    }
+
+    .tz-hour.selected .tz-hour-time,
+    .tz-hour.selected .tz-hour-period {
+      opacity: 1 !important;
+    }
+
+    .tz-hour.in-range {
+      background: rgba(196, 248, 100, 0.35) !important;
+      border-color: rgba(196, 248, 100, 0.5);
+      color: var(--fg);
+    }
+
+    .tz-hour.in-range .tz-hour-time,
+    .tz-hour.in-range .tz-hour-period {
+      opacity: 1 !important;
+    }
+
+    /* Current hour marker - only shown on home city */
+    .tz-hour.current-home {
+      border-bottom: 2px solid #fb923c;
+    }
+
+    /* Current hour shows minutes in orange instead of AM/PM */
+    .tz-hour.current-home .tz-hour-period {
+      color: #fb923c;
+      opacity: 1;
+      font-weight: 600;
+    }
+
+    /* Day marker - absolute positioned with gradient fade */
+    .tz-day-marker {
+      position: absolute;
+      top: -14px;
+      font-size: 0.55rem;
+      color: var(--bg);
+      background: linear-gradient(90deg, var(--accent) 0%, var(--accent) 70%, transparent 100%);
+      padding: 0.1rem 0.3rem 0.1rem 0.35rem;
+      padding-right: 0.8rem;
+      border-radius: 3px 3px 0 0;
+      font-weight: 600;
+      transform: translateX(0);
+      white-space: nowrap;
+      z-index: 10;
+    }
+
+    .tz-footer {
+      padding: 1rem 1.5rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.75rem;
+      color: var(--muted);
+    }
+
+    .tz-legend {
+      display: flex;
+      gap: 1rem;
+    }
+
+    .tz-legend-item {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .tz-legend-color {
+      width: 12px;
+      height: 12px;
+      border-radius: 2px;
+    }
+
+    .tz-legend-color.work {
+      background: rgba(100, 220, 140, 0.25);
+    }
+
+    .tz-legend-color.day {
+      background: rgba(255, 191, 105, 0.2);
+    }
+
+    .tz-legend-color.night {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
     /* Mobile adjustments */
     @media (max-width: 600px) {
       html { font-size: 16px; }
@@ -286,6 +1157,98 @@
       .glow { width: 300px; height: 300px; }
       .grid-glow { display: none; }
       .description { margin-bottom: 2rem; }
+
+      /* Time zone modal mobile */
+      .tz-modal {
+        width: 100%;
+        height: 100%;
+        max-height: 100%;
+        border-radius: 0;
+      }
+
+      .tz-header {
+        padding: 1rem;
+      }
+
+      .tz-controls {
+        padding: 0.75rem 1rem;
+        flex-direction: column;
+        gap: 0.75rem;
+      }
+
+      .tz-search-container {
+        width: 100%;
+      }
+
+      .tz-city-row {
+        flex-direction: column;
+        padding: 0.75rem 1rem;
+        gap: 0.5rem;
+        align-items: stretch;
+      }
+
+      .tz-city-info {
+        width: 100%;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .tz-timeline-container {
+        width: 100%;
+      }
+
+      .tz-timeline {
+        width: 100%;
+      }
+
+      .tz-shift-btn {
+        display: none;
+      }
+
+      .tz-day-markers {
+        top: -12px;
+      }
+
+      .tz-day-marker {
+        top: -10px;
+        font-size: 0.5rem;
+      }
+
+      .tz-hour {
+        height: 36px;
+        font-size: 0.65rem;
+      }
+
+      .tz-hour-time {
+        font-size: 0.55rem;
+      }
+
+      .tz-hour-period {
+        font-size: 0.4rem;
+      }
+
+      .tz-date-picker {
+        flex: 1;
+        justify-content: center;
+      }
+
+      .tz-footer {
+        padding: 0.75rem 1rem;
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+
+      .tz-legend {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 0.5rem;
+      }
+
+      .tz-selection-info {
+        padding: 0.5rem 1rem;
+        flex-wrap: wrap;
+      }
     }
   </style>
 </head>
@@ -297,6 +1260,92 @@
   <div class="top-bar">
     <span class="datetime" id="datetime"></span>
     <span class="btc-price" id="btc-price">BTC: --</span>
+  </div>
+
+  <!-- Time Zone Converter Modal -->
+  <div class="tz-overlay" id="tz-overlay">
+    <div class="tz-modal">
+      <div class="tz-header">
+        <div class="tz-logo">
+          <svg width="28" height="28" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="50" cy="50" r="45" stroke="var(--accent)" stroke-width="4" fill="none"/>
+            <ellipse cx="50" cy="50" rx="18" ry="45" stroke="var(--accent)" stroke-width="2" fill="none" opacity="0.6"/>
+            <line x1="5" y1="50" x2="95" y2="50" stroke="var(--accent)" stroke-width="2" opacity="0.4"/>
+            <line x1="50" y1="5" x2="50" y2="95" stroke="var(--accent)" stroke-width="2" opacity="0.4"/>
+            <line x1="50" y1="50" x2="50" y2="20" stroke="var(--accent)" stroke-width="4" stroke-linecap="round"/>
+            <line x1="50" y1="50" x2="72" y2="58" stroke="var(--accent)" stroke-width="3" stroke-linecap="round"/>
+            <circle cx="50" cy="50" r="4" fill="var(--accent)"/>
+          </svg>
+          <span class="tz-title">World Time Buddy</span>
+        </div>
+        <button class="tz-close" id="tz-close">&times;</button>
+      </div>
+      <div class="tz-controls">
+        <div class="tz-search-container">
+          <span class="tz-search-icon">+</span>
+          <input type="text" class="tz-search" id="tz-search" placeholder="Add city or timezone..." autocomplete="off">
+          <div class="tz-suggestions" id="tz-suggestions"></div>
+        </div>
+        <div class="tz-date-picker tz-calendar-wrapper">
+          <button class="tz-date-btn" id="tz-date-prev">‹</button>
+          <span class="tz-date-display" id="tz-date-display">Today</span>
+          <button class="tz-date-btn" id="tz-date-next">›</button>
+          <span class="tz-date-today" id="tz-date-today">Today</span>
+          <div class="tz-calendar" id="tz-calendar">
+            <div class="tz-calendar-header">
+              <div class="tz-calendar-nav">
+                <button id="tz-cal-prev-month">‹</button>
+              </div>
+              <span class="tz-calendar-title" id="tz-calendar-title">January 2026</span>
+              <div class="tz-calendar-nav">
+                <button id="tz-cal-next-month">›</button>
+              </div>
+            </div>
+            <div class="tz-calendar-weekdays">
+              <span class="tz-calendar-weekday">Sun</span>
+              <span class="tz-calendar-weekday">Mon</span>
+              <span class="tz-calendar-weekday">Tue</span>
+              <span class="tz-calendar-weekday">Wed</span>
+              <span class="tz-calendar-weekday">Thu</span>
+              <span class="tz-calendar-weekday">Fri</span>
+              <span class="tz-calendar-weekday">Sat</span>
+            </div>
+            <div class="tz-calendar-days" id="tz-calendar-days"></div>
+          </div>
+        </div>
+      </div>
+      <div class="tz-selection-info" id="tz-selection-info">
+        <span>Selected:</span>
+        <input type="text" class="tz-time-input" id="tz-start-time" placeholder="9:00am">
+        <span class="tz-time-separator">→</span>
+        <input type="text" class="tz-time-input" id="tz-end-time" placeholder="5:00pm">
+        <span class="tz-selection-duration" id="tz-selection-duration"></span>
+        <div class="tz-selection-actions">
+          <button class="tz-btn" id="tz-clear-selection">Clear</button>
+          <button class="tz-btn primary" id="tz-copy-selection"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>Clipboard</button>
+        </div>
+      </div>
+      <div class="tz-copy-toast" id="tz-copy-toast">Copied to clipboard!</div>
+      <div class="tz-cities" id="tz-cities">
+        <!-- Cities will be rendered here -->
+      </div>
+      <div class="tz-footer">
+        <div class="tz-legend">
+          <div class="tz-legend-item">
+            <div class="tz-legend-color work"></div>
+            <span>Work hours (9-5)</span>
+          </div>
+          <div class="tz-legend-item">
+            <div class="tz-legend-color day"></div>
+            <span>Day (7am-9pm)</span>
+          </div>
+          <div class="tz-legend-item">
+            <div class="tz-legend-color night"></div>
+            <span>Night</span>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 
   <main>
@@ -412,6 +1461,1715 @@ The human occasionally said "nice."
     }
     fetchBtcPrice();
     setInterval(fetchBtcPrice, 30000);
+
+    // ===== TIME ZONE CONVERTER =====
+    const tzOverlay = document.getElementById('tz-overlay');
+    const tzClose = document.getElementById('tz-close');
+    const tzSearch = document.getElementById('tz-search');
+    const tzSuggestions = document.getElementById('tz-suggestions');
+    const tzCities = document.getElementById('tz-cities');
+    const tzDateDisplay = document.getElementById('tz-date-display');
+    const tzDatePrev = document.getElementById('tz-date-prev');
+    const tzDateNext = document.getElementById('tz-date-next');
+    const tzDateToday = document.getElementById('tz-date-today');
+    const tzCalendar = document.getElementById('tz-calendar');
+    const tzCalendarTitle = document.getElementById('tz-calendar-title');
+    const tzCalendarDays = document.getElementById('tz-calendar-days');
+    const tzCalPrevMonth = document.getElementById('tz-cal-prev-month');
+    const tzCalNextMonth = document.getElementById('tz-cal-next-month');
+    const tzSelectionInfo = document.getElementById('tz-selection-info');
+    const tzSelectionDuration = document.getElementById('tz-selection-duration');
+    const tzStartTimeInput = document.getElementById('tz-start-time');
+    const tzEndTimeInput = document.getElementById('tz-end-time');
+    const tzClearSelection = document.getElementById('tz-clear-selection');
+    const tzCopySelection = document.getElementById('tz-copy-selection');
+    const tzCopyToast = document.getElementById('tz-copy-toast');
+    const dateTimeEl = document.getElementById('datetime');
+    let calendarViewDate = new Date(); // Track which month is shown in calendar
+
+    // Expanded cities database with 400+ cities worldwide
+    const CITIES_DATABASE = [
+      // North America - USA (expanded)
+      { name: 'San Francisco', country: 'United States', timezone: 'America/Los_Angeles', abbr: 'PST' },
+      { name: 'San Jose', country: 'United States', timezone: 'America/Los_Angeles', abbr: 'PST' },
+      { name: 'Los Angeles', country: 'United States', timezone: 'America/Los_Angeles', abbr: 'PST' },
+      { name: 'San Diego', country: 'United States', timezone: 'America/Los_Angeles', abbr: 'PST' },
+      { name: 'Seattle', country: 'United States', timezone: 'America/Los_Angeles', abbr: 'PST' },
+      { name: 'Portland', country: 'United States', timezone: 'America/Los_Angeles', abbr: 'PST' },
+      { name: 'Las Vegas', country: 'United States', timezone: 'America/Los_Angeles', abbr: 'PST' },
+      { name: 'Sacramento', country: 'United States', timezone: 'America/Los_Angeles', abbr: 'PST' },
+      { name: 'Oakland', country: 'United States', timezone: 'America/Los_Angeles', abbr: 'PST' },
+      { name: 'Fresno', country: 'United States', timezone: 'America/Los_Angeles', abbr: 'PST' },
+      { name: 'Long Beach', country: 'United States', timezone: 'America/Los_Angeles', abbr: 'PST' },
+      { name: 'Denver', country: 'United States', timezone: 'America/Denver', abbr: 'MST' },
+      { name: 'Phoenix', country: 'United States', timezone: 'America/Phoenix', abbr: 'MST' },
+      { name: 'Salt Lake City', country: 'United States', timezone: 'America/Denver', abbr: 'MST' },
+      { name: 'Tucson', country: 'United States', timezone: 'America/Phoenix', abbr: 'MST' },
+      { name: 'Albuquerque', country: 'United States', timezone: 'America/Denver', abbr: 'MST' },
+      { name: 'Boise', country: 'United States', timezone: 'America/Boise', abbr: 'MST' },
+      { name: 'Chicago', country: 'United States', timezone: 'America/Chicago', abbr: 'CST' },
+      { name: 'Houston', country: 'United States', timezone: 'America/Chicago', abbr: 'CST' },
+      { name: 'Dallas', country: 'United States', timezone: 'America/Chicago', abbr: 'CST' },
+      { name: 'Austin', country: 'United States', timezone: 'America/Chicago', abbr: 'CST' },
+      { name: 'San Antonio', country: 'United States', timezone: 'America/Chicago', abbr: 'CST' },
+      { name: 'Minneapolis', country: 'United States', timezone: 'America/Chicago', abbr: 'CST' },
+      { name: 'New Orleans', country: 'United States', timezone: 'America/Chicago', abbr: 'CST' },
+      { name: 'Kansas City', country: 'United States', timezone: 'America/Chicago', abbr: 'CST' },
+      { name: 'Milwaukee', country: 'United States', timezone: 'America/Chicago', abbr: 'CST' },
+      { name: 'Oklahoma City', country: 'United States', timezone: 'America/Chicago', abbr: 'CST' },
+      { name: 'Memphis', country: 'United States', timezone: 'America/Chicago', abbr: 'CST' },
+      { name: 'Nashville', country: 'United States', timezone: 'America/Chicago', abbr: 'CST' },
+      { name: 'St Louis', country: 'United States', timezone: 'America/Chicago', abbr: 'CST' },
+      { name: 'New York', country: 'United States', timezone: 'America/New_York', abbr: 'EST' },
+      { name: 'Boston', country: 'United States', timezone: 'America/New_York', abbr: 'EST' },
+      { name: 'Miami', country: 'United States', timezone: 'America/New_York', abbr: 'EST' },
+      { name: 'Atlanta', country: 'United States', timezone: 'America/New_York', abbr: 'EST' },
+      { name: 'Washington DC', country: 'United States', timezone: 'America/New_York', abbr: 'EST' },
+      { name: 'Philadelphia', country: 'United States', timezone: 'America/New_York', abbr: 'EST' },
+      { name: 'Detroit', country: 'United States', timezone: 'America/New_York', abbr: 'EST' },
+      { name: 'Charlotte', country: 'United States', timezone: 'America/New_York', abbr: 'EST' },
+      { name: 'Baltimore', country: 'United States', timezone: 'America/New_York', abbr: 'EST' },
+      { name: 'Orlando', country: 'United States', timezone: 'America/New_York', abbr: 'EST' },
+      { name: 'Tampa', country: 'United States', timezone: 'America/New_York', abbr: 'EST' },
+      { name: 'Pittsburgh', country: 'United States', timezone: 'America/New_York', abbr: 'EST' },
+      { name: 'Cleveland', country: 'United States', timezone: 'America/New_York', abbr: 'EST' },
+      { name: 'Cincinnati', country: 'United States', timezone: 'America/New_York', abbr: 'EST' },
+      { name: 'Indianapolis', country: 'United States', timezone: 'America/Indiana/Indianapolis', abbr: 'EST' },
+      { name: 'Columbus', country: 'United States', timezone: 'America/New_York', abbr: 'EST' },
+      { name: 'Raleigh', country: 'United States', timezone: 'America/New_York', abbr: 'EST' },
+      { name: 'Jacksonville', country: 'United States', timezone: 'America/New_York', abbr: 'EST' },
+      { name: 'Honolulu', country: 'United States', timezone: 'Pacific/Honolulu', abbr: 'HST' },
+      { name: 'Anchorage', country: 'United States', timezone: 'America/Anchorage', abbr: 'AKST' },
+      // North America - Canada (expanded)
+      { name: 'Toronto', country: 'Canada', timezone: 'America/Toronto', abbr: 'EST' },
+      { name: 'Vancouver', country: 'Canada', timezone: 'America/Vancouver', abbr: 'PST' },
+      { name: 'Montreal', country: 'Canada', timezone: 'America/Montreal', abbr: 'EST' },
+      { name: 'Calgary', country: 'Canada', timezone: 'America/Edmonton', abbr: 'MST' },
+      { name: 'Edmonton', country: 'Canada', timezone: 'America/Edmonton', abbr: 'MST' },
+      { name: 'Ottawa', country: 'Canada', timezone: 'America/Toronto', abbr: 'EST' },
+      { name: 'Winnipeg', country: 'Canada', timezone: 'America/Winnipeg', abbr: 'CST' },
+      { name: 'Quebec City', country: 'Canada', timezone: 'America/Montreal', abbr: 'EST' },
+      { name: 'Halifax', country: 'Canada', timezone: 'America/Halifax', abbr: 'AST' },
+      { name: 'Victoria', country: 'Canada', timezone: 'America/Vancouver', abbr: 'PST' },
+      { name: 'Regina', country: 'Canada', timezone: 'America/Regina', abbr: 'CST' },
+      { name: 'Saskatoon', country: 'Canada', timezone: 'America/Regina', abbr: 'CST' },
+      { name: "St John's", country: 'Canada', timezone: 'America/St_Johns', abbr: 'NST' },
+      // Europe - Western (expanded)
+      { name: 'London', country: 'United Kingdom', timezone: 'Europe/London', abbr: 'GMT' },
+      { name: 'Manchester', country: 'United Kingdom', timezone: 'Europe/London', abbr: 'GMT' },
+      { name: 'Edinburgh', country: 'United Kingdom', timezone: 'Europe/London', abbr: 'GMT' },
+      { name: 'Birmingham', country: 'United Kingdom', timezone: 'Europe/London', abbr: 'GMT' },
+      { name: 'Glasgow', country: 'United Kingdom', timezone: 'Europe/London', abbr: 'GMT' },
+      { name: 'Liverpool', country: 'United Kingdom', timezone: 'Europe/London', abbr: 'GMT' },
+      { name: 'Bristol', country: 'United Kingdom', timezone: 'Europe/London', abbr: 'GMT' },
+      { name: 'Leeds', country: 'United Kingdom', timezone: 'Europe/London', abbr: 'GMT' },
+      { name: 'Belfast', country: 'United Kingdom', timezone: 'Europe/London', abbr: 'GMT' },
+      { name: 'Cardiff', country: 'United Kingdom', timezone: 'Europe/London', abbr: 'GMT' },
+      { name: 'Dublin', country: 'Ireland', timezone: 'Europe/Dublin', abbr: 'GMT' },
+      { name: 'Cork', country: 'Ireland', timezone: 'Europe/Dublin', abbr: 'GMT' },
+      { name: 'Galway', country: 'Ireland', timezone: 'Europe/Dublin', abbr: 'GMT' },
+      { name: 'Paris', country: 'France', timezone: 'Europe/Paris', abbr: 'CET' },
+      { name: 'Lyon', country: 'France', timezone: 'Europe/Paris', abbr: 'CET' },
+      { name: 'Marseille', country: 'France', timezone: 'Europe/Paris', abbr: 'CET' },
+      { name: 'Toulouse', country: 'France', timezone: 'Europe/Paris', abbr: 'CET' },
+      { name: 'Nice', country: 'France', timezone: 'Europe/Paris', abbr: 'CET' },
+      { name: 'Bordeaux', country: 'France', timezone: 'Europe/Paris', abbr: 'CET' },
+      { name: 'Strasbourg', country: 'France', timezone: 'Europe/Paris', abbr: 'CET' },
+      { name: 'Berlin', country: 'Germany', timezone: 'Europe/Berlin', abbr: 'CET' },
+      { name: 'Munich', country: 'Germany', timezone: 'Europe/Berlin', abbr: 'CET' },
+      { name: 'Frankfurt', country: 'Germany', timezone: 'Europe/Berlin', abbr: 'CET' },
+      { name: 'Hamburg', country: 'Germany', timezone: 'Europe/Berlin', abbr: 'CET' },
+      { name: 'Cologne', country: 'Germany', timezone: 'Europe/Berlin', abbr: 'CET' },
+      { name: 'Dusseldorf', country: 'Germany', timezone: 'Europe/Berlin', abbr: 'CET' },
+      { name: 'Stuttgart', country: 'Germany', timezone: 'Europe/Berlin', abbr: 'CET' },
+      { name: 'Leipzig', country: 'Germany', timezone: 'Europe/Berlin', abbr: 'CET' },
+      { name: 'Dresden', country: 'Germany', timezone: 'Europe/Berlin', abbr: 'CET' },
+      { name: 'Amsterdam', country: 'Netherlands', timezone: 'Europe/Amsterdam', abbr: 'CET' },
+      { name: 'Rotterdam', country: 'Netherlands', timezone: 'Europe/Amsterdam', abbr: 'CET' },
+      { name: 'The Hague', country: 'Netherlands', timezone: 'Europe/Amsterdam', abbr: 'CET' },
+      { name: 'Utrecht', country: 'Netherlands', timezone: 'Europe/Amsterdam', abbr: 'CET' },
+      { name: 'Brussels', country: 'Belgium', timezone: 'Europe/Brussels', abbr: 'CET' },
+      { name: 'Antwerp', country: 'Belgium', timezone: 'Europe/Brussels', abbr: 'CET' },
+      { name: 'Ghent', country: 'Belgium', timezone: 'Europe/Brussels', abbr: 'CET' },
+      { name: 'Rome', country: 'Italy', timezone: 'Europe/Rome', abbr: 'CET' },
+      { name: 'Milan', country: 'Italy', timezone: 'Europe/Rome', abbr: 'CET' },
+      { name: 'Venice', country: 'Italy', timezone: 'Europe/Rome', abbr: 'CET' },
+      { name: 'Florence', country: 'Italy', timezone: 'Europe/Rome', abbr: 'CET' },
+      { name: 'Naples', country: 'Italy', timezone: 'Europe/Rome', abbr: 'CET' },
+      { name: 'Turin', country: 'Italy', timezone: 'Europe/Rome', abbr: 'CET' },
+      { name: 'Bologna', country: 'Italy', timezone: 'Europe/Rome', abbr: 'CET' },
+      { name: 'Palermo', country: 'Italy', timezone: 'Europe/Rome', abbr: 'CET' },
+      { name: 'Madrid', country: 'Spain', timezone: 'Europe/Madrid', abbr: 'CET' },
+      { name: 'Barcelona', country: 'Spain', timezone: 'Europe/Madrid', abbr: 'CET' },
+      { name: 'Valencia', country: 'Spain', timezone: 'Europe/Madrid', abbr: 'CET' },
+      { name: 'Seville', country: 'Spain', timezone: 'Europe/Madrid', abbr: 'CET' },
+      { name: 'Bilbao', country: 'Spain', timezone: 'Europe/Madrid', abbr: 'CET' },
+      { name: 'Malaga', country: 'Spain', timezone: 'Europe/Madrid', abbr: 'CET' },
+      { name: 'Lisbon', country: 'Portugal', timezone: 'Europe/Lisbon', abbr: 'WET' },
+      { name: 'Porto', country: 'Portugal', timezone: 'Europe/Lisbon', abbr: 'WET' },
+      { name: 'Zurich', country: 'Switzerland', timezone: 'Europe/Zurich', abbr: 'CET' },
+      { name: 'Geneva', country: 'Switzerland', timezone: 'Europe/Zurich', abbr: 'CET' },
+      { name: 'Basel', country: 'Switzerland', timezone: 'Europe/Zurich', abbr: 'CET' },
+      { name: 'Bern', country: 'Switzerland', timezone: 'Europe/Zurich', abbr: 'CET' },
+      { name: 'Vienna', country: 'Austria', timezone: 'Europe/Vienna', abbr: 'CET' },
+      { name: 'Salzburg', country: 'Austria', timezone: 'Europe/Vienna', abbr: 'CET' },
+      { name: 'Innsbruck', country: 'Austria', timezone: 'Europe/Vienna', abbr: 'CET' },
+      { name: 'Luxembourg', country: 'Luxembourg', timezone: 'Europe/Luxembourg', abbr: 'CET' },
+      { name: 'Monaco', country: 'Monaco', timezone: 'Europe/Monaco', abbr: 'CET' },
+      // Europe - Northern (expanded)
+      { name: 'Stockholm', country: 'Sweden', timezone: 'Europe/Stockholm', abbr: 'CET' },
+      { name: 'Gothenburg', country: 'Sweden', timezone: 'Europe/Stockholm', abbr: 'CET' },
+      { name: 'Malmo', country: 'Sweden', timezone: 'Europe/Stockholm', abbr: 'CET' },
+      { name: 'Oslo', country: 'Norway', timezone: 'Europe/Oslo', abbr: 'CET' },
+      { name: 'Bergen', country: 'Norway', timezone: 'Europe/Oslo', abbr: 'CET' },
+      { name: 'Trondheim', country: 'Norway', timezone: 'Europe/Oslo', abbr: 'CET' },
+      { name: 'Copenhagen', country: 'Denmark', timezone: 'Europe/Copenhagen', abbr: 'CET' },
+      { name: 'Aarhus', country: 'Denmark', timezone: 'Europe/Copenhagen', abbr: 'CET' },
+      { name: 'Helsinki', country: 'Finland', timezone: 'Europe/Helsinki', abbr: 'EET' },
+      { name: 'Tampere', country: 'Finland', timezone: 'Europe/Helsinki', abbr: 'EET' },
+      { name: 'Turku', country: 'Finland', timezone: 'Europe/Helsinki', abbr: 'EET' },
+      { name: 'Reykjavik', country: 'Iceland', timezone: 'Atlantic/Reykjavik', abbr: 'GMT' },
+      { name: 'Tallinn', country: 'Estonia', timezone: 'Europe/Tallinn', abbr: 'EET' },
+      { name: 'Riga', country: 'Latvia', timezone: 'Europe/Riga', abbr: 'EET' },
+      { name: 'Vilnius', country: 'Lithuania', timezone: 'Europe/Vilnius', abbr: 'EET' },
+      // Europe - Eastern (expanded)
+      { name: 'Warsaw', country: 'Poland', timezone: 'Europe/Warsaw', abbr: 'CET' },
+      { name: 'Krakow', country: 'Poland', timezone: 'Europe/Warsaw', abbr: 'CET' },
+      { name: 'Wroclaw', country: 'Poland', timezone: 'Europe/Warsaw', abbr: 'CET' },
+      { name: 'Gdansk', country: 'Poland', timezone: 'Europe/Warsaw', abbr: 'CET' },
+      { name: 'Poznan', country: 'Poland', timezone: 'Europe/Warsaw', abbr: 'CET' },
+      { name: 'Prague', country: 'Czech Republic', timezone: 'Europe/Prague', abbr: 'CET' },
+      { name: 'Brno', country: 'Czech Republic', timezone: 'Europe/Prague', abbr: 'CET' },
+      { name: 'Budapest', country: 'Hungary', timezone: 'Europe/Budapest', abbr: 'CET' },
+      { name: 'Bucharest', country: 'Romania', timezone: 'Europe/Bucharest', abbr: 'EET' },
+      { name: 'Cluj-Napoca', country: 'Romania', timezone: 'Europe/Bucharest', abbr: 'EET' },
+      { name: 'Sofia', country: 'Bulgaria', timezone: 'Europe/Sofia', abbr: 'EET' },
+      { name: 'Plovdiv', country: 'Bulgaria', timezone: 'Europe/Sofia', abbr: 'EET' },
+      { name: 'Athens', country: 'Greece', timezone: 'Europe/Athens', abbr: 'EET' },
+      { name: 'Thessaloniki', country: 'Greece', timezone: 'Europe/Athens', abbr: 'EET' },
+      { name: 'Istanbul', country: 'Turkey', timezone: 'Europe/Istanbul', abbr: 'TRT' },
+      { name: 'Ankara', country: 'Turkey', timezone: 'Europe/Istanbul', abbr: 'TRT' },
+      { name: 'Izmir', country: 'Turkey', timezone: 'Europe/Istanbul', abbr: 'TRT' },
+      { name: 'Antalya', country: 'Turkey', timezone: 'Europe/Istanbul', abbr: 'TRT' },
+      { name: 'Bursa', country: 'Turkey', timezone: 'Europe/Istanbul', abbr: 'TRT' },
+      { name: 'Moscow', country: 'Russia', timezone: 'Europe/Moscow', abbr: 'MSK' },
+      { name: 'St Petersburg', country: 'Russia', timezone: 'Europe/Moscow', abbr: 'MSK' },
+      { name: 'Novosibirsk', country: 'Russia', timezone: 'Asia/Novosibirsk', abbr: 'NOVT' },
+      { name: 'Yekaterinburg', country: 'Russia', timezone: 'Asia/Yekaterinburg', abbr: 'YEKT' },
+      { name: 'Nizhny Novgorod', country: 'Russia', timezone: 'Europe/Moscow', abbr: 'MSK' },
+      { name: 'Kazan', country: 'Russia', timezone: 'Europe/Moscow', abbr: 'MSK' },
+      { name: 'Samara', country: 'Russia', timezone: 'Europe/Samara', abbr: 'SAMT' },
+      { name: 'Vladivostok', country: 'Russia', timezone: 'Asia/Vladivostok', abbr: 'VLAT' },
+      { name: 'Irkutsk', country: 'Russia', timezone: 'Asia/Irkutsk', abbr: 'IRKT' },
+      { name: 'Krasnoyarsk', country: 'Russia', timezone: 'Asia/Krasnoyarsk', abbr: 'KRAT' },
+      { name: 'Kyiv', country: 'Ukraine', timezone: 'Europe/Kyiv', abbr: 'EET' },
+      { name: 'Kharkiv', country: 'Ukraine', timezone: 'Europe/Kyiv', abbr: 'EET' },
+      { name: 'Odesa', country: 'Ukraine', timezone: 'Europe/Kyiv', abbr: 'EET' },
+      { name: 'Lviv', country: 'Ukraine', timezone: 'Europe/Kyiv', abbr: 'EET' },
+      { name: 'Minsk', country: 'Belarus', timezone: 'Europe/Minsk', abbr: 'MSK' },
+      { name: 'Belgrade', country: 'Serbia', timezone: 'Europe/Belgrade', abbr: 'CET' },
+      { name: 'Zagreb', country: 'Croatia', timezone: 'Europe/Zagreb', abbr: 'CET' },
+      { name: 'Ljubljana', country: 'Slovenia', timezone: 'Europe/Ljubljana', abbr: 'CET' },
+      { name: 'Sarajevo', country: 'Bosnia', timezone: 'Europe/Sarajevo', abbr: 'CET' },
+      { name: 'Skopje', country: 'North Macedonia', timezone: 'Europe/Skopje', abbr: 'CET' },
+      { name: 'Tirana', country: 'Albania', timezone: 'Europe/Tirane', abbr: 'CET' },
+      { name: 'Podgorica', country: 'Montenegro', timezone: 'Europe/Podgorica', abbr: 'CET' },
+      { name: 'Bratislava', country: 'Slovakia', timezone: 'Europe/Bratislava', abbr: 'CET' },
+      { name: 'Chisinau', country: 'Moldova', timezone: 'Europe/Chisinau', abbr: 'EET' },
+      // Middle East (expanded)
+      { name: 'Dubai', country: 'UAE', timezone: 'Asia/Dubai', abbr: 'GST' },
+      { name: 'Abu Dhabi', country: 'UAE', timezone: 'Asia/Dubai', abbr: 'GST' },
+      { name: 'Sharjah', country: 'UAE', timezone: 'Asia/Dubai', abbr: 'GST' },
+      { name: 'Doha', country: 'Qatar', timezone: 'Asia/Qatar', abbr: 'AST' },
+      { name: 'Riyadh', country: 'Saudi Arabia', timezone: 'Asia/Riyadh', abbr: 'AST' },
+      { name: 'Jeddah', country: 'Saudi Arabia', timezone: 'Asia/Riyadh', abbr: 'AST' },
+      { name: 'Mecca', country: 'Saudi Arabia', timezone: 'Asia/Riyadh', abbr: 'AST' },
+      { name: 'Medina', country: 'Saudi Arabia', timezone: 'Asia/Riyadh', abbr: 'AST' },
+      { name: 'Dammam', country: 'Saudi Arabia', timezone: 'Asia/Riyadh', abbr: 'AST' },
+      { name: 'Kuwait City', country: 'Kuwait', timezone: 'Asia/Kuwait', abbr: 'AST' },
+      { name: 'Muscat', country: 'Oman', timezone: 'Asia/Muscat', abbr: 'GST' },
+      { name: 'Manama', country: 'Bahrain', timezone: 'Asia/Bahrain', abbr: 'AST' },
+      { name: 'Tehran', country: 'Iran', timezone: 'Asia/Tehran', abbr: 'IRST' },
+      { name: 'Mashhad', country: 'Iran', timezone: 'Asia/Tehran', abbr: 'IRST' },
+      { name: 'Isfahan', country: 'Iran', timezone: 'Asia/Tehran', abbr: 'IRST' },
+      { name: 'Tabriz', country: 'Iran', timezone: 'Asia/Tehran', abbr: 'IRST' },
+      { name: 'Shiraz', country: 'Iran', timezone: 'Asia/Tehran', abbr: 'IRST' },
+      { name: 'Baghdad', country: 'Iraq', timezone: 'Asia/Baghdad', abbr: 'AST' },
+      { name: 'Basra', country: 'Iraq', timezone: 'Asia/Baghdad', abbr: 'AST' },
+      { name: 'Erbil', country: 'Iraq', timezone: 'Asia/Baghdad', abbr: 'AST' },
+      { name: 'Amman', country: 'Jordan', timezone: 'Asia/Amman', abbr: 'EET' },
+      { name: 'Beirut', country: 'Lebanon', timezone: 'Asia/Beirut', abbr: 'EET' },
+      { name: 'Tel Aviv', country: 'Israel', timezone: 'Asia/Jerusalem', abbr: 'IST' },
+      { name: 'Jerusalem', country: 'Israel', timezone: 'Asia/Jerusalem', abbr: 'IST' },
+      { name: 'Haifa', country: 'Israel', timezone: 'Asia/Jerusalem', abbr: 'IST' },
+      { name: 'Damascus', country: 'Syria', timezone: 'Asia/Damascus', abbr: 'EET' },
+      { name: 'Aleppo', country: 'Syria', timezone: 'Asia/Damascus', abbr: 'EET' },
+      { name: "Sana'a", country: 'Yemen', timezone: 'Asia/Aden', abbr: 'AST' },
+      { name: 'Aden', country: 'Yemen', timezone: 'Asia/Aden', abbr: 'AST' },
+      // South Asia (expanded)
+      { name: 'Mumbai', country: 'India', timezone: 'Asia/Kolkata', abbr: 'IST' },
+      { name: 'Delhi', country: 'India', timezone: 'Asia/Kolkata', abbr: 'IST' },
+      { name: 'Bangalore', country: 'India', timezone: 'Asia/Kolkata', abbr: 'IST' },
+      { name: 'Chennai', country: 'India', timezone: 'Asia/Kolkata', abbr: 'IST' },
+      { name: 'Hyderabad', country: 'India', timezone: 'Asia/Kolkata', abbr: 'IST' },
+      { name: 'Kolkata', country: 'India', timezone: 'Asia/Kolkata', abbr: 'IST' },
+      { name: 'Pune', country: 'India', timezone: 'Asia/Kolkata', abbr: 'IST' },
+      { name: 'Ahmedabad', country: 'India', timezone: 'Asia/Kolkata', abbr: 'IST' },
+      { name: 'Jaipur', country: 'India', timezone: 'Asia/Kolkata', abbr: 'IST' },
+      { name: 'Surat', country: 'India', timezone: 'Asia/Kolkata', abbr: 'IST' },
+      { name: 'Lucknow', country: 'India', timezone: 'Asia/Kolkata', abbr: 'IST' },
+      { name: 'Kanpur', country: 'India', timezone: 'Asia/Kolkata', abbr: 'IST' },
+      { name: 'Nagpur', country: 'India', timezone: 'Asia/Kolkata', abbr: 'IST' },
+      { name: 'Indore', country: 'India', timezone: 'Asia/Kolkata', abbr: 'IST' },
+      { name: 'Patna', country: 'India', timezone: 'Asia/Kolkata', abbr: 'IST' },
+      { name: 'Bhopal', country: 'India', timezone: 'Asia/Kolkata', abbr: 'IST' },
+      { name: 'Kochi', country: 'India', timezone: 'Asia/Kolkata', abbr: 'IST' },
+      { name: 'Goa', country: 'India', timezone: 'Asia/Kolkata', abbr: 'IST' },
+      { name: 'Chandigarh', country: 'India', timezone: 'Asia/Kolkata', abbr: 'IST' },
+      { name: 'Karachi', country: 'Pakistan', timezone: 'Asia/Karachi', abbr: 'PKT' },
+      { name: 'Lahore', country: 'Pakistan', timezone: 'Asia/Karachi', abbr: 'PKT' },
+      { name: 'Islamabad', country: 'Pakistan', timezone: 'Asia/Karachi', abbr: 'PKT' },
+      { name: 'Faisalabad', country: 'Pakistan', timezone: 'Asia/Karachi', abbr: 'PKT' },
+      { name: 'Rawalpindi', country: 'Pakistan', timezone: 'Asia/Karachi', abbr: 'PKT' },
+      { name: 'Multan', country: 'Pakistan', timezone: 'Asia/Karachi', abbr: 'PKT' },
+      { name: 'Peshawar', country: 'Pakistan', timezone: 'Asia/Karachi', abbr: 'PKT' },
+      { name: 'Dhaka', country: 'Bangladesh', timezone: 'Asia/Dhaka', abbr: 'BST' },
+      { name: 'Chittagong', country: 'Bangladesh', timezone: 'Asia/Dhaka', abbr: 'BST' },
+      { name: 'Khulna', country: 'Bangladesh', timezone: 'Asia/Dhaka', abbr: 'BST' },
+      { name: 'Colombo', country: 'Sri Lanka', timezone: 'Asia/Colombo', abbr: 'IST' },
+      { name: 'Kandy', country: 'Sri Lanka', timezone: 'Asia/Colombo', abbr: 'IST' },
+      { name: 'Kathmandu', country: 'Nepal', timezone: 'Asia/Kathmandu', abbr: 'NPT' },
+      { name: 'Pokhara', country: 'Nepal', timezone: 'Asia/Kathmandu', abbr: 'NPT' },
+      { name: 'Thimphu', country: 'Bhutan', timezone: 'Asia/Thimphu', abbr: 'BTT' },
+      { name: 'Male', country: 'Maldives', timezone: 'Indian/Maldives', abbr: 'MVT' },
+      // Central Asia (expanded)
+      { name: 'Almaty', country: 'Kazakhstan', timezone: 'Asia/Almaty', abbr: 'ALMT' },
+      { name: 'Nur-Sultan', country: 'Kazakhstan', timezone: 'Asia/Almaty', abbr: 'ALMT' },
+      { name: 'Astana', country: 'Kazakhstan', timezone: 'Asia/Almaty', abbr: 'ALMT' },
+      { name: 'Shymkent', country: 'Kazakhstan', timezone: 'Asia/Almaty', abbr: 'ALMT' },
+      { name: 'Aktau', country: 'Kazakhstan', timezone: 'Asia/Aqtau', abbr: 'AQTT' },
+      { name: 'Tashkent', country: 'Uzbekistan', timezone: 'Asia/Tashkent', abbr: 'UZT' },
+      { name: 'Samarkand', country: 'Uzbekistan', timezone: 'Asia/Samarkand', abbr: 'UZT' },
+      { name: 'Bukhara', country: 'Uzbekistan', timezone: 'Asia/Samarkand', abbr: 'UZT' },
+      { name: 'Namangan', country: 'Uzbekistan', timezone: 'Asia/Tashkent', abbr: 'UZT' },
+      { name: 'Dushanbe', country: 'Tajikistan', timezone: 'Asia/Dushanbe', abbr: 'TJT' },
+      { name: 'Khujand', country: 'Tajikistan', timezone: 'Asia/Dushanbe', abbr: 'TJT' },
+      { name: 'Bishkek', country: 'Kyrgyzstan', timezone: 'Asia/Bishkek', abbr: 'KGT' },
+      { name: 'Osh', country: 'Kyrgyzstan', timezone: 'Asia/Bishkek', abbr: 'KGT' },
+      { name: 'Ashgabat', country: 'Turkmenistan', timezone: 'Asia/Ashgabat', abbr: 'TMT' },
+      { name: 'Baku', country: 'Azerbaijan', timezone: 'Asia/Baku', abbr: 'AZT' },
+      { name: 'Tbilisi', country: 'Georgia', timezone: 'Asia/Tbilisi', abbr: 'GET' },
+      { name: 'Batumi', country: 'Georgia', timezone: 'Asia/Tbilisi', abbr: 'GET' },
+      { name: 'Yerevan', country: 'Armenia', timezone: 'Asia/Yerevan', abbr: 'AMT' },
+      { name: 'Kabul', country: 'Afghanistan', timezone: 'Asia/Kabul', abbr: 'AFT' },
+      { name: 'Herat', country: 'Afghanistan', timezone: 'Asia/Kabul', abbr: 'AFT' },
+      { name: 'Kandahar', country: 'Afghanistan', timezone: 'Asia/Kabul', abbr: 'AFT' },
+      // Southeast Asia (expanded)
+      { name: 'Singapore', country: 'Singapore', timezone: 'Asia/Singapore', abbr: 'SGT' },
+      { name: 'Bangkok', country: 'Thailand', timezone: 'Asia/Bangkok', abbr: 'ICT' },
+      { name: 'Phuket', country: 'Thailand', timezone: 'Asia/Bangkok', abbr: 'ICT' },
+      { name: 'Chiang Mai', country: 'Thailand', timezone: 'Asia/Bangkok', abbr: 'ICT' },
+      { name: 'Pattaya', country: 'Thailand', timezone: 'Asia/Bangkok', abbr: 'ICT' },
+      { name: 'Jakarta', country: 'Indonesia', timezone: 'Asia/Jakarta', abbr: 'WIB' },
+      { name: 'Surabaya', country: 'Indonesia', timezone: 'Asia/Jakarta', abbr: 'WIB' },
+      { name: 'Bandung', country: 'Indonesia', timezone: 'Asia/Jakarta', abbr: 'WIB' },
+      { name: 'Medan', country: 'Indonesia', timezone: 'Asia/Jakarta', abbr: 'WIB' },
+      { name: 'Bali', country: 'Indonesia', timezone: 'Asia/Makassar', abbr: 'WITA' },
+      { name: 'Yogyakarta', country: 'Indonesia', timezone: 'Asia/Jakarta', abbr: 'WIB' },
+      { name: 'Kuala Lumpur', country: 'Malaysia', timezone: 'Asia/Kuala_Lumpur', abbr: 'MYT' },
+      { name: 'Penang', country: 'Malaysia', timezone: 'Asia/Kuala_Lumpur', abbr: 'MYT' },
+      { name: 'Johor Bahru', country: 'Malaysia', timezone: 'Asia/Kuala_Lumpur', abbr: 'MYT' },
+      { name: 'Kuching', country: 'Malaysia', timezone: 'Asia/Kuching', abbr: 'MYT' },
+      { name: 'Ho Chi Minh City', country: 'Vietnam', timezone: 'Asia/Ho_Chi_Minh', abbr: 'ICT' },
+      { name: 'Hanoi', country: 'Vietnam', timezone: 'Asia/Ho_Chi_Minh', abbr: 'ICT' },
+      { name: 'Da Nang', country: 'Vietnam', timezone: 'Asia/Ho_Chi_Minh', abbr: 'ICT' },
+      { name: 'Nha Trang', country: 'Vietnam', timezone: 'Asia/Ho_Chi_Minh', abbr: 'ICT' },
+      { name: 'Manila', country: 'Philippines', timezone: 'Asia/Manila', abbr: 'PHT' },
+      { name: 'Cebu', country: 'Philippines', timezone: 'Asia/Manila', abbr: 'PHT' },
+      { name: 'Davao', country: 'Philippines', timezone: 'Asia/Manila', abbr: 'PHT' },
+      { name: 'Phnom Penh', country: 'Cambodia', timezone: 'Asia/Phnom_Penh', abbr: 'ICT' },
+      { name: 'Siem Reap', country: 'Cambodia', timezone: 'Asia/Phnom_Penh', abbr: 'ICT' },
+      { name: 'Yangon', country: 'Myanmar', timezone: 'Asia/Yangon', abbr: 'MMT' },
+      { name: 'Mandalay', country: 'Myanmar', timezone: 'Asia/Yangon', abbr: 'MMT' },
+      { name: 'Vientiane', country: 'Laos', timezone: 'Asia/Vientiane', abbr: 'ICT' },
+      { name: 'Luang Prabang', country: 'Laos', timezone: 'Asia/Vientiane', abbr: 'ICT' },
+      { name: 'Bandar Seri Begawan', country: 'Brunei', timezone: 'Asia/Brunei', abbr: 'BNT' },
+      { name: 'Dili', country: 'East Timor', timezone: 'Asia/Dili', abbr: 'TLT' },
+      // East Asia (expanded)
+      { name: 'Hong Kong', country: 'China', timezone: 'Asia/Hong_Kong', abbr: 'HKT' },
+      { name: 'Macau', country: 'China', timezone: 'Asia/Macau', abbr: 'CST' },
+      { name: 'Shanghai', country: 'China', timezone: 'Asia/Shanghai', abbr: 'CST' },
+      { name: 'Beijing', country: 'China', timezone: 'Asia/Shanghai', abbr: 'CST' },
+      { name: 'Shenzhen', country: 'China', timezone: 'Asia/Shanghai', abbr: 'CST' },
+      { name: 'Guangzhou', country: 'China', timezone: 'Asia/Shanghai', abbr: 'CST' },
+      { name: 'Chengdu', country: 'China', timezone: 'Asia/Shanghai', abbr: 'CST' },
+      { name: 'Hangzhou', country: 'China', timezone: 'Asia/Shanghai', abbr: 'CST' },
+      { name: 'Nanjing', country: 'China', timezone: 'Asia/Shanghai', abbr: 'CST' },
+      { name: 'Wuhan', country: 'China', timezone: 'Asia/Shanghai', abbr: 'CST' },
+      { name: "Xi'an", country: 'China', timezone: 'Asia/Shanghai', abbr: 'CST' },
+      { name: 'Chongqing', country: 'China', timezone: 'Asia/Shanghai', abbr: 'CST' },
+      { name: 'Tianjin', country: 'China', timezone: 'Asia/Shanghai', abbr: 'CST' },
+      { name: 'Suzhou', country: 'China', timezone: 'Asia/Shanghai', abbr: 'CST' },
+      { name: 'Qingdao', country: 'China', timezone: 'Asia/Shanghai', abbr: 'CST' },
+      { name: 'Dalian', country: 'China', timezone: 'Asia/Shanghai', abbr: 'CST' },
+      { name: 'Shenyang', country: 'China', timezone: 'Asia/Shanghai', abbr: 'CST' },
+      { name: 'Harbin', country: 'China', timezone: 'Asia/Shanghai', abbr: 'CST' },
+      { name: 'Kunming', country: 'China', timezone: 'Asia/Shanghai', abbr: 'CST' },
+      { name: 'Taipei', country: 'Taiwan', timezone: 'Asia/Taipei', abbr: 'CST' },
+      { name: 'Kaohsiung', country: 'Taiwan', timezone: 'Asia/Taipei', abbr: 'CST' },
+      { name: 'Taichung', country: 'Taiwan', timezone: 'Asia/Taipei', abbr: 'CST' },
+      { name: 'Seoul', country: 'South Korea', timezone: 'Asia/Seoul', abbr: 'KST' },
+      { name: 'Busan', country: 'South Korea', timezone: 'Asia/Seoul', abbr: 'KST' },
+      { name: 'Incheon', country: 'South Korea', timezone: 'Asia/Seoul', abbr: 'KST' },
+      { name: 'Daegu', country: 'South Korea', timezone: 'Asia/Seoul', abbr: 'KST' },
+      { name: 'Daejeon', country: 'South Korea', timezone: 'Asia/Seoul', abbr: 'KST' },
+      { name: 'Gwangju', country: 'South Korea', timezone: 'Asia/Seoul', abbr: 'KST' },
+      { name: 'Tokyo', country: 'Japan', timezone: 'Asia/Tokyo', abbr: 'JST' },
+      { name: 'Osaka', country: 'Japan', timezone: 'Asia/Tokyo', abbr: 'JST' },
+      { name: 'Kyoto', country: 'Japan', timezone: 'Asia/Tokyo', abbr: 'JST' },
+      { name: 'Yokohama', country: 'Japan', timezone: 'Asia/Tokyo', abbr: 'JST' },
+      { name: 'Nagoya', country: 'Japan', timezone: 'Asia/Tokyo', abbr: 'JST' },
+      { name: 'Sapporo', country: 'Japan', timezone: 'Asia/Tokyo', abbr: 'JST' },
+      { name: 'Fukuoka', country: 'Japan', timezone: 'Asia/Tokyo', abbr: 'JST' },
+      { name: 'Kobe', country: 'Japan', timezone: 'Asia/Tokyo', abbr: 'JST' },
+      { name: 'Hiroshima', country: 'Japan', timezone: 'Asia/Tokyo', abbr: 'JST' },
+      { name: 'Sendai', country: 'Japan', timezone: 'Asia/Tokyo', abbr: 'JST' },
+      { name: 'Nara', country: 'Japan', timezone: 'Asia/Tokyo', abbr: 'JST' },
+      { name: 'Okinawa', country: 'Japan', timezone: 'Asia/Tokyo', abbr: 'JST' },
+      { name: 'Pyongyang', country: 'North Korea', timezone: 'Asia/Pyongyang', abbr: 'KST' },
+      { name: 'Ulaanbaatar', country: 'Mongolia', timezone: 'Asia/Ulaanbaatar', abbr: 'ULAT' },
+      // Oceania (expanded)
+      { name: 'Sydney', country: 'Australia', timezone: 'Australia/Sydney', abbr: 'AEST' },
+      { name: 'Melbourne', country: 'Australia', timezone: 'Australia/Melbourne', abbr: 'AEST' },
+      { name: 'Brisbane', country: 'Australia', timezone: 'Australia/Brisbane', abbr: 'AEST' },
+      { name: 'Perth', country: 'Australia', timezone: 'Australia/Perth', abbr: 'AWST' },
+      { name: 'Adelaide', country: 'Australia', timezone: 'Australia/Adelaide', abbr: 'ACST' },
+      { name: 'Gold Coast', country: 'Australia', timezone: 'Australia/Brisbane', abbr: 'AEST' },
+      { name: 'Canberra', country: 'Australia', timezone: 'Australia/Sydney', abbr: 'AEST' },
+      { name: 'Newcastle', country: 'Australia', timezone: 'Australia/Sydney', abbr: 'AEST' },
+      { name: 'Hobart', country: 'Australia', timezone: 'Australia/Hobart', abbr: 'AEST' },
+      { name: 'Darwin', country: 'Australia', timezone: 'Australia/Darwin', abbr: 'ACST' },
+      { name: 'Cairns', country: 'Australia', timezone: 'Australia/Brisbane', abbr: 'AEST' },
+      { name: 'Auckland', country: 'New Zealand', timezone: 'Pacific/Auckland', abbr: 'NZST' },
+      { name: 'Wellington', country: 'New Zealand', timezone: 'Pacific/Auckland', abbr: 'NZST' },
+      { name: 'Christchurch', country: 'New Zealand', timezone: 'Pacific/Auckland', abbr: 'NZST' },
+      { name: 'Queenstown', country: 'New Zealand', timezone: 'Pacific/Auckland', abbr: 'NZST' },
+      { name: 'Fiji', country: 'Fiji', timezone: 'Pacific/Fiji', abbr: 'FJT' },
+      { name: 'Suva', country: 'Fiji', timezone: 'Pacific/Fiji', abbr: 'FJT' },
+      { name: 'Port Moresby', country: 'Papua New Guinea', timezone: 'Pacific/Port_Moresby', abbr: 'PGT' },
+      { name: 'Noumea', country: 'New Caledonia', timezone: 'Pacific/Noumea', abbr: 'NCT' },
+      { name: 'Guam', country: 'Guam', timezone: 'Pacific/Guam', abbr: 'ChST' },
+      { name: 'Tahiti', country: 'French Polynesia', timezone: 'Pacific/Tahiti', abbr: 'TAHT' },
+      { name: 'Papeete', country: 'French Polynesia', timezone: 'Pacific/Tahiti', abbr: 'TAHT' },
+      { name: 'Apia', country: 'Samoa', timezone: 'Pacific/Apia', abbr: 'WST' },
+      { name: 'Tonga', country: 'Tonga', timezone: 'Pacific/Tongatapu', abbr: 'TOT' },
+      // Latin America (expanded)
+      { name: 'Mexico City', country: 'Mexico', timezone: 'America/Mexico_City', abbr: 'CST' },
+      { name: 'Guadalajara', country: 'Mexico', timezone: 'America/Mexico_City', abbr: 'CST' },
+      { name: 'Monterrey', country: 'Mexico', timezone: 'America/Monterrey', abbr: 'CST' },
+      { name: 'Cancun', country: 'Mexico', timezone: 'America/Cancun', abbr: 'EST' },
+      { name: 'Tijuana', country: 'Mexico', timezone: 'America/Tijuana', abbr: 'PST' },
+      { name: 'Puebla', country: 'Mexico', timezone: 'America/Mexico_City', abbr: 'CST' },
+      { name: 'Leon', country: 'Mexico', timezone: 'America/Mexico_City', abbr: 'CST' },
+      { name: 'Merida', country: 'Mexico', timezone: 'America/Merida', abbr: 'CST' },
+      { name: 'Puerto Vallarta', country: 'Mexico', timezone: 'America/Mexico_City', abbr: 'CST' },
+      { name: 'Sao Paulo', country: 'Brazil', timezone: 'America/Sao_Paulo', abbr: 'BRT' },
+      { name: 'Rio de Janeiro', country: 'Brazil', timezone: 'America/Sao_Paulo', abbr: 'BRT' },
+      { name: 'Brasilia', country: 'Brazil', timezone: 'America/Sao_Paulo', abbr: 'BRT' },
+      { name: 'Salvador', country: 'Brazil', timezone: 'America/Bahia', abbr: 'BRT' },
+      { name: 'Fortaleza', country: 'Brazil', timezone: 'America/Fortaleza', abbr: 'BRT' },
+      { name: 'Belo Horizonte', country: 'Brazil', timezone: 'America/Sao_Paulo', abbr: 'BRT' },
+      { name: 'Manaus', country: 'Brazil', timezone: 'America/Manaus', abbr: 'AMT' },
+      { name: 'Curitiba', country: 'Brazil', timezone: 'America/Sao_Paulo', abbr: 'BRT' },
+      { name: 'Recife', country: 'Brazil', timezone: 'America/Recife', abbr: 'BRT' },
+      { name: 'Porto Alegre', country: 'Brazil', timezone: 'America/Sao_Paulo', abbr: 'BRT' },
+      { name: 'Buenos Aires', country: 'Argentina', timezone: 'America/Argentina/Buenos_Aires', abbr: 'ART' },
+      { name: 'Cordoba', country: 'Argentina', timezone: 'America/Argentina/Cordoba', abbr: 'ART' },
+      { name: 'Mendoza', country: 'Argentina', timezone: 'America/Argentina/Mendoza', abbr: 'ART' },
+      { name: 'Rosario', country: 'Argentina', timezone: 'America/Argentina/Buenos_Aires', abbr: 'ART' },
+      { name: 'Santiago', country: 'Chile', timezone: 'America/Santiago', abbr: 'CLT' },
+      { name: 'Valparaiso', country: 'Chile', timezone: 'America/Santiago', abbr: 'CLT' },
+      { name: 'Concepcion', country: 'Chile', timezone: 'America/Santiago', abbr: 'CLT' },
+      { name: 'Lima', country: 'Peru', timezone: 'America/Lima', abbr: 'PET' },
+      { name: 'Arequipa', country: 'Peru', timezone: 'America/Lima', abbr: 'PET' },
+      { name: 'Cusco', country: 'Peru', timezone: 'America/Lima', abbr: 'PET' },
+      { name: 'Bogota', country: 'Colombia', timezone: 'America/Bogota', abbr: 'COT' },
+      { name: 'Medellin', country: 'Colombia', timezone: 'America/Bogota', abbr: 'COT' },
+      { name: 'Cali', country: 'Colombia', timezone: 'America/Bogota', abbr: 'COT' },
+      { name: 'Cartagena', country: 'Colombia', timezone: 'America/Bogota', abbr: 'COT' },
+      { name: 'Barranquilla', country: 'Colombia', timezone: 'America/Bogota', abbr: 'COT' },
+      { name: 'Caracas', country: 'Venezuela', timezone: 'America/Caracas', abbr: 'VET' },
+      { name: 'Maracaibo', country: 'Venezuela', timezone: 'America/Caracas', abbr: 'VET' },
+      { name: 'Quito', country: 'Ecuador', timezone: 'America/Guayaquil', abbr: 'ECT' },
+      { name: 'Guayaquil', country: 'Ecuador', timezone: 'America/Guayaquil', abbr: 'ECT' },
+      { name: 'Galapagos', country: 'Ecuador', timezone: 'Pacific/Galapagos', abbr: 'GALT' },
+      { name: 'Montevideo', country: 'Uruguay', timezone: 'America/Montevideo', abbr: 'UYT' },
+      { name: 'Panama City', country: 'Panama', timezone: 'America/Panama', abbr: 'EST' },
+      { name: 'San Jose', country: 'Costa Rica', timezone: 'America/Costa_Rica', abbr: 'CST' },
+      { name: 'Guatemala City', country: 'Guatemala', timezone: 'America/Guatemala', abbr: 'CST' },
+      { name: 'San Salvador', country: 'El Salvador', timezone: 'America/El_Salvador', abbr: 'CST' },
+      { name: 'Tegucigalpa', country: 'Honduras', timezone: 'America/Tegucigalpa', abbr: 'CST' },
+      { name: 'Managua', country: 'Nicaragua', timezone: 'America/Managua', abbr: 'CST' },
+      { name: 'San Juan', country: 'Puerto Rico', timezone: 'America/Puerto_Rico', abbr: 'AST' },
+      { name: 'Havana', country: 'Cuba', timezone: 'America/Havana', abbr: 'CST' },
+      { name: 'Santo Domingo', country: 'Dominican Republic', timezone: 'America/Santo_Domingo', abbr: 'AST' },
+      { name: 'Port-au-Prince', country: 'Haiti', timezone: 'America/Port-au-Prince', abbr: 'EST' },
+      { name: 'Kingston', country: 'Jamaica', timezone: 'America/Jamaica', abbr: 'EST' },
+      { name: 'Nassau', country: 'Bahamas', timezone: 'America/Nassau', abbr: 'EST' },
+      { name: 'Asuncion', country: 'Paraguay', timezone: 'America/Asuncion', abbr: 'PYT' },
+      { name: 'La Paz', country: 'Bolivia', timezone: 'America/La_Paz', abbr: 'BOT' },
+      { name: 'Santa Cruz', country: 'Bolivia', timezone: 'America/La_Paz', abbr: 'BOT' },
+      { name: 'Georgetown', country: 'Guyana', timezone: 'America/Guyana', abbr: 'GYT' },
+      { name: 'Paramaribo', country: 'Suriname', timezone: 'America/Paramaribo', abbr: 'SRT' },
+      { name: 'Cayenne', country: 'French Guiana', timezone: 'America/Cayenne', abbr: 'GFT' },
+      // Africa (expanded)
+      { name: 'Cairo', country: 'Egypt', timezone: 'Africa/Cairo', abbr: 'EET' },
+      { name: 'Alexandria', country: 'Egypt', timezone: 'Africa/Cairo', abbr: 'EET' },
+      { name: 'Luxor', country: 'Egypt', timezone: 'Africa/Cairo', abbr: 'EET' },
+      { name: 'Sharm El Sheikh', country: 'Egypt', timezone: 'Africa/Cairo', abbr: 'EET' },
+      { name: 'Johannesburg', country: 'South Africa', timezone: 'Africa/Johannesburg', abbr: 'SAST' },
+      { name: 'Cape Town', country: 'South Africa', timezone: 'Africa/Johannesburg', abbr: 'SAST' },
+      { name: 'Durban', country: 'South Africa', timezone: 'Africa/Johannesburg', abbr: 'SAST' },
+      { name: 'Pretoria', country: 'South Africa', timezone: 'Africa/Johannesburg', abbr: 'SAST' },
+      { name: 'Port Elizabeth', country: 'South Africa', timezone: 'Africa/Johannesburg', abbr: 'SAST' },
+      { name: 'Lagos', country: 'Nigeria', timezone: 'Africa/Lagos', abbr: 'WAT' },
+      { name: 'Abuja', country: 'Nigeria', timezone: 'Africa/Lagos', abbr: 'WAT' },
+      { name: 'Kano', country: 'Nigeria', timezone: 'Africa/Lagos', abbr: 'WAT' },
+      { name: 'Ibadan', country: 'Nigeria', timezone: 'Africa/Lagos', abbr: 'WAT' },
+      { name: 'Nairobi', country: 'Kenya', timezone: 'Africa/Nairobi', abbr: 'EAT' },
+      { name: 'Mombasa', country: 'Kenya', timezone: 'Africa/Nairobi', abbr: 'EAT' },
+      { name: 'Addis Ababa', country: 'Ethiopia', timezone: 'Africa/Addis_Ababa', abbr: 'EAT' },
+      { name: 'Casablanca', country: 'Morocco', timezone: 'Africa/Casablanca', abbr: 'WET' },
+      { name: 'Marrakech', country: 'Morocco', timezone: 'Africa/Casablanca', abbr: 'WET' },
+      { name: 'Rabat', country: 'Morocco', timezone: 'Africa/Casablanca', abbr: 'WET' },
+      { name: 'Fez', country: 'Morocco', timezone: 'Africa/Casablanca', abbr: 'WET' },
+      { name: 'Tangier', country: 'Morocco', timezone: 'Africa/Casablanca', abbr: 'WET' },
+      { name: 'Tunis', country: 'Tunisia', timezone: 'Africa/Tunis', abbr: 'CET' },
+      { name: 'Algiers', country: 'Algeria', timezone: 'Africa/Algiers', abbr: 'CET' },
+      { name: 'Oran', country: 'Algeria', timezone: 'Africa/Algiers', abbr: 'CET' },
+      { name: 'Tripoli', country: 'Libya', timezone: 'Africa/Tripoli', abbr: 'EET' },
+      { name: 'Accra', country: 'Ghana', timezone: 'Africa/Accra', abbr: 'GMT' },
+      { name: 'Kumasi', country: 'Ghana', timezone: 'Africa/Accra', abbr: 'GMT' },
+      { name: 'Dakar', country: 'Senegal', timezone: 'Africa/Dakar', abbr: 'GMT' },
+      { name: 'Dar es Salaam', country: 'Tanzania', timezone: 'Africa/Dar_es_Salaam', abbr: 'EAT' },
+      { name: 'Zanzibar', country: 'Tanzania', timezone: 'Africa/Dar_es_Salaam', abbr: 'EAT' },
+      { name: 'Kampala', country: 'Uganda', timezone: 'Africa/Kampala', abbr: 'EAT' },
+      { name: 'Kigali', country: 'Rwanda', timezone: 'Africa/Kigali', abbr: 'CAT' },
+      { name: 'Lusaka', country: 'Zambia', timezone: 'Africa/Lusaka', abbr: 'CAT' },
+      { name: 'Harare', country: 'Zimbabwe', timezone: 'Africa/Harare', abbr: 'CAT' },
+      { name: 'Victoria Falls', country: 'Zimbabwe', timezone: 'Africa/Harare', abbr: 'CAT' },
+      { name: 'Maputo', country: 'Mozambique', timezone: 'Africa/Maputo', abbr: 'CAT' },
+      { name: 'Gaborone', country: 'Botswana', timezone: 'Africa/Gaborone', abbr: 'CAT' },
+      { name: 'Windhoek', country: 'Namibia', timezone: 'Africa/Windhoek', abbr: 'CAT' },
+      { name: 'Luanda', country: 'Angola', timezone: 'Africa/Luanda', abbr: 'WAT' },
+      { name: 'Kinshasa', country: 'DR Congo', timezone: 'Africa/Kinshasa', abbr: 'WAT' },
+      { name: 'Lubumbashi', country: 'DR Congo', timezone: 'Africa/Lubumbashi', abbr: 'CAT' },
+      { name: 'Douala', country: 'Cameroon', timezone: 'Africa/Douala', abbr: 'WAT' },
+      { name: 'Yaounde', country: 'Cameroon', timezone: 'Africa/Douala', abbr: 'WAT' },
+      { name: 'Abidjan', country: 'Ivory Coast', timezone: 'Africa/Abidjan', abbr: 'GMT' },
+      { name: 'Bamako', country: 'Mali', timezone: 'Africa/Bamako', abbr: 'GMT' },
+      { name: 'Ouagadougou', country: 'Burkina Faso', timezone: 'Africa/Ouagadougou', abbr: 'GMT' },
+      { name: 'Niamey', country: 'Niger', timezone: 'Africa/Niamey', abbr: 'WAT' },
+      { name: 'Conakry', country: 'Guinea', timezone: 'Africa/Conakry', abbr: 'GMT' },
+      { name: 'Freetown', country: 'Sierra Leone', timezone: 'Africa/Freetown', abbr: 'GMT' },
+      { name: 'Monrovia', country: 'Liberia', timezone: 'Africa/Monrovia', abbr: 'GMT' },
+      { name: 'Banjul', country: 'Gambia', timezone: 'Africa/Banjul', abbr: 'GMT' },
+      { name: 'Nouakchott', country: 'Mauritania', timezone: 'Africa/Nouakchott', abbr: 'GMT' },
+      { name: 'Asmara', country: 'Eritrea', timezone: 'Africa/Asmara', abbr: 'EAT' },
+      { name: 'Djibouti', country: 'Djibouti', timezone: 'Africa/Djibouti', abbr: 'EAT' },
+      { name: 'Mogadishu', country: 'Somalia', timezone: 'Africa/Mogadishu', abbr: 'EAT' },
+      { name: 'Antananarivo', country: 'Madagascar', timezone: 'Indian/Antananarivo', abbr: 'EAT' },
+      { name: 'Port Louis', country: 'Mauritius', timezone: 'Indian/Mauritius', abbr: 'MUT' },
+      { name: 'Victoria', country: 'Seychelles', timezone: 'Indian/Mahe', abbr: 'SCT' },
+      // Atlantic
+      { name: 'Bermuda', country: 'Bermuda', timezone: 'Atlantic/Bermuda', abbr: 'AST' },
+      { name: 'Azores', country: 'Portugal', timezone: 'Atlantic/Azores', abbr: 'AZOT' },
+      { name: 'Cape Verde', country: 'Cape Verde', timezone: 'Atlantic/Cape_Verde', abbr: 'CVT' },
+      { name: 'Canary Islands', country: 'Spain', timezone: 'Atlantic/Canary', abbr: 'WET' },
+      { name: 'Las Palmas', country: 'Spain', timezone: 'Atlantic/Canary', abbr: 'WET' },
+      { name: 'Santa Cruz de Tenerife', country: 'Spain', timezone: 'Atlantic/Canary', abbr: 'WET' },
+      { name: 'Funchal', country: 'Portugal', timezone: 'Atlantic/Madeira', abbr: 'WET' }
+    ];
+
+    // Get all IANA timezones for fallback search
+    const ALL_TIMEZONES = Intl.supportedValuesOf ? Intl.supportedValuesOf('timeZone') : [];
+
+    // Timezone aliases - maps common names/regions to IANA timezones
+    const TIMEZONE_ALIASES = {
+      'hawaii': { name: 'Hawaii', country: 'United States', timezone: 'Pacific/Honolulu', abbr: 'HST' },
+      'alaska': { name: 'Alaska', country: 'United States', timezone: 'America/Anchorage', abbr: 'AKST' },
+      'eastern': { name: 'Eastern Time', country: 'United States', timezone: 'America/New_York', abbr: 'EST' },
+      'central': { name: 'Central Time', country: 'United States', timezone: 'America/Chicago', abbr: 'CST' },
+      'mountain': { name: 'Mountain Time', country: 'United States', timezone: 'America/Denver', abbr: 'MST' },
+      'pacific': { name: 'Pacific Time', country: 'United States', timezone: 'America/Los_Angeles', abbr: 'PST' },
+      'gmt': { name: 'GMT', country: 'United Kingdom', timezone: 'Europe/London', abbr: 'GMT' },
+      'utc': { name: 'UTC', country: '', timezone: 'UTC', abbr: 'UTC' },
+      'ist': { name: 'India', country: 'India', timezone: 'Asia/Kolkata', abbr: 'IST' },
+      'cet': { name: 'Central European', country: 'Europe', timezone: 'Europe/Paris', abbr: 'CET' },
+      'jst': { name: 'Japan', country: 'Japan', timezone: 'Asia/Tokyo', abbr: 'JST' },
+      'aest': { name: 'Australia Eastern', country: 'Australia', timezone: 'Australia/Sydney', abbr: 'AEST' },
+      'nzst': { name: 'New Zealand', country: 'New Zealand', timezone: 'Pacific/Auckland', abbr: 'NZST' },
+      'bst': { name: 'British Summer', country: 'United Kingdom', timezone: 'Europe/London', abbr: 'BST' },
+      'pst': { name: 'Pacific Standard', country: 'United States', timezone: 'America/Los_Angeles', abbr: 'PST' },
+      'est': { name: 'Eastern Standard', country: 'United States', timezone: 'America/New_York', abbr: 'EST' },
+      'cst': { name: 'Central Standard', country: 'United States', timezone: 'America/Chicago', abbr: 'CST' },
+      'mst': { name: 'Mountain Standard', country: 'United States', timezone: 'America/Denver', abbr: 'MST' }
+    };
+
+    // State
+    let cities = [
+      { name: 'San Francisco', country: 'United States', timezone: 'America/Los_Angeles', abbr: 'PST', isHome: true },
+      { name: 'Tehran', country: 'Iran', timezone: 'Asia/Tehran', abbr: 'IRST', isHome: false },
+      { name: 'Charlotte', country: 'United States', timezone: 'America/New_York', abbr: 'EST', isHome: false }
+    ];
+    let selectedDate = new Date();
+    let selectionStart = null;
+    let selectionEnd = null;
+    let selectionStartTime = null; // Absolute start time (Date object)
+    let selectionEndTime = null;   // Absolute end time (Date object)
+    let isDragging = false;
+    let dragStartSlot = null;
+    let timelineOffset = 0; // Hours offset for timeline view (for 8-hour skip)
+
+    // Helper: Get precise UTC offset in MINUTES for a timezone
+    function getTimezoneOffsetMinutes(timezone) {
+      const now = new Date();
+      const tzStr = now.toLocaleString('en-US', { timeZone: timezone, hour12: false, year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' });
+      const utcStr = now.toLocaleString('en-US', { timeZone: 'UTC', hour12: false, year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' });
+
+      // Parse dates
+      const parseDateStr = (str) => {
+        const [datePart, timePart] = str.split(', ');
+        const [month, day, year] = datePart.split('/').map(Number);
+        const [hour, min, sec] = timePart.split(':').map(Number);
+        return new Date(year, month - 1, day, hour, min, sec);
+      };
+
+      const tzDate = parseDateStr(tzStr);
+      const utcDate = parseDateStr(utcStr);
+      return Math.round((tzDate - utcDate) / 60000); // Return minutes
+    }
+
+    // Helper: Get offset between two timezones in minutes
+    function getOffsetBetweenTimezones(tz1, tz2) {
+      return getTimezoneOffsetMinutes(tz2) - getTimezoneOffsetMinutes(tz1);
+    }
+
+    // Helper: Get UTC offset string for a timezone (display purposes)
+    function getUTCOffset(timezone) {
+      const offsetMins = getTimezoneOffsetMinutes(timezone);
+      const hours = Math.floor(Math.abs(offsetMins) / 60);
+      const mins = Math.abs(offsetMins) % 60;
+      const sign = offsetMins >= 0 ? '+' : '-';
+      if (mins === 0) {
+        return `UTC${sign}${hours}`;
+      }
+      return `UTC${sign}${hours}:${mins.toString().padStart(2, '0')}`;
+    }
+
+    // Helper: Get time in a specific timezone
+    function getTimeInTimezone(date, timezone) {
+      return new Date(date.toLocaleString('en-US', { timeZone: timezone }));
+    }
+
+    // Helper: Format hour for display
+    function formatHour(hour) {
+      const h = hour % 12 || 12;
+      const period = hour < 12 ? 'AM' : 'PM';
+      return { time: h, period };
+    }
+
+    // Helper: Get hour class based on time of day
+    function getHourClass(hour) {
+      if (hour >= 9 && hour < 17) return 'work';
+      if (hour >= 7 && hour < 21) return 'day';
+      return 'night';
+    }
+
+    // Helper: Format time with half hour support (slotIndex is 0-47, accounts for timelineOffset)
+    function formatTimeWithHalf(slotIndex, isEndTime = false) {
+      // Account for timeline offset
+      const actualHour = Math.floor(slotIndex / 2) + timelineOffset;
+      const isHalf = slotIndex % 2 === 1;
+      // Normalize to 0-23 range
+      let normalizedHour = ((actualHour % 24) + 24) % 24;
+      let minutes = isHalf ? ':30' : '';
+
+      // If this is an end time and it's exactly midnight, show 11:59pm instead
+      if (isEndTime && normalizedHour === 0 && !isHalf) {
+        normalizedHour = 23;
+        minutes = ':59';
+      }
+
+      const h = normalizedHour % 12 || 12;
+      const period = normalizedHour < 12 ? 'am' : 'pm';
+      return `${h}${minutes}${period}`;
+    }
+
+    // Format date for display
+    function formatDateDisplay(date) {
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      const compareDate = new Date(date);
+      compareDate.setHours(0, 0, 0, 0);
+
+      const diffDays = Math.round((compareDate - today) / (1000 * 60 * 60 * 24));
+
+      if (diffDays === 0) return 'Today';
+      if (diffDays === 1) return 'Tomorrow';
+      if (diffDays === -1) return 'Yesterday';
+
+      return date.toLocaleDateString('en-US', {
+        weekday: 'short',
+        month: 'short',
+        day: 'numeric'
+      });
+    }
+
+    // Update date display
+    function updateDateDisplay() {
+      tzDateDisplay.textContent = formatDateDisplay(selectedDate);
+      // Hide "Today" button if already on today
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      const compareDate = new Date(selectedDate);
+      compareDate.setHours(0, 0, 0, 0);
+      tzDateToday.style.display = (today.getTime() === compareDate.getTime()) ? 'none' : 'inline';
+    }
+
+    // Navigate date
+    function navigateDate(delta) {
+      selectedDate.setDate(selectedDate.getDate() + delta);
+      updateDateDisplay();
+      renderCities();
+    }
+
+    // Render calendar
+    function renderCalendar() {
+      const year = calendarViewDate.getFullYear();
+      const month = calendarViewDate.getMonth();
+
+      // Update title
+      tzCalendarTitle.textContent = calendarViewDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+
+      // Get first day of month and number of days
+      const firstDay = new Date(year, month, 1);
+      const lastDay = new Date(year, month + 1, 0);
+      const daysInMonth = lastDay.getDate();
+      const startDayOfWeek = firstDay.getDay();
+
+      // Get today for highlighting
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+
+      // Get selected date for highlighting
+      const selected = new Date(selectedDate);
+      selected.setHours(0, 0, 0, 0);
+
+      let html = '';
+
+      // Previous month days
+      const prevMonthLastDay = new Date(year, month, 0).getDate();
+      for (let i = startDayOfWeek - 1; i >= 0; i--) {
+        const day = prevMonthLastDay - i;
+        const date = new Date(year, month - 1, day);
+        html += `<div class="tz-calendar-day other-month" data-date="${date.toISOString()}">${day}</div>`;
+      }
+
+      // Current month days
+      for (let day = 1; day <= daysInMonth; day++) {
+        const date = new Date(year, month, day);
+        date.setHours(0, 0, 0, 0);
+        const isToday = date.getTime() === today.getTime();
+        const isSelected = date.getTime() === selected.getTime();
+        const classes = ['tz-calendar-day'];
+        if (isToday) classes.push('today');
+        if (isSelected) classes.push('selected');
+        html += `<div class="${classes.join(' ')}" data-date="${date.toISOString()}">${day}</div>`;
+      }
+
+      // Next month days to fill grid
+      const totalCells = Math.ceil((startDayOfWeek + daysInMonth) / 7) * 7;
+      const nextMonthDays = totalCells - (startDayOfWeek + daysInMonth);
+      for (let day = 1; day <= nextMonthDays; day++) {
+        const date = new Date(year, month + 1, day);
+        html += `<div class="tz-calendar-day other-month" data-date="${date.toISOString()}">${day}</div>`;
+      }
+
+      tzCalendarDays.innerHTML = html;
+
+      // Add click handlers
+      tzCalendarDays.querySelectorAll('.tz-calendar-day').forEach(dayEl => {
+        dayEl.addEventListener('click', () => {
+          selectedDate = new Date(dayEl.dataset.date);
+          updateDateDisplay();
+          renderCalendar();
+          renderCities();
+          tzCalendar.classList.remove('active');
+        });
+      });
+    }
+
+    // Toggle calendar
+    function toggleCalendar() {
+      calendarViewDate = new Date(selectedDate);
+      renderCalendar();
+      tzCalendar.classList.toggle('active');
+    }
+
+    // Open modal
+    function openTzModal() {
+      tzOverlay.classList.add('active');
+      selectedDate = new Date();
+      timelineOffset = 0; // Reset timeline offset
+      updateDateDisplay();
+      renderCities();
+      document.body.style.overflow = 'hidden';
+    }
+
+    // Close modal
+    function closeTzModal() {
+      tzOverlay.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+
+    // Search cities - uses IANA timezone database (400+ timezones) + curated city list
+    function searchCities(query) {
+      if (!query || query.length < 2) {
+        tzSuggestions.classList.remove('active');
+        return;
+      }
+      const q = query.toLowerCase().replace(/\s+/g, '');
+
+      // Helper: Get region/country name from timezone
+      const getRegionName = (tz) => {
+        const parts = tz.split('/');
+        const region = parts[0];
+        const regionMap = {
+          'America': 'Americas',
+          'Europe': 'Europe',
+          'Asia': 'Asia',
+          'Africa': 'Africa',
+          'Pacific': 'Pacific',
+          'Atlantic': 'Atlantic',
+          'Indian': 'Indian Ocean',
+          'Australia': 'Australia',
+          'Antarctica': 'Antarctica'
+        };
+        return regionMap[region] || region;
+      };
+
+      // Helper: Score a result for sorting (higher = better match)
+      const scoreResult = (item, searchQuery) => {
+        const name = item.name.toLowerCase();
+        const country = (item.country || '').toLowerCase();
+        const tz = item.timezone.toLowerCase();
+
+        // Exact match gets highest score
+        if (name === searchQuery) return 100;
+        // Starts with gets high score
+        if (name.startsWith(searchQuery)) return 80;
+        // Word boundary match
+        if (name.includes(' ' + searchQuery) || name.includes(searchQuery + ' ')) return 60;
+        // Contains match
+        if (name.includes(searchQuery)) return 40;
+        // Country/region match
+        if (country.includes(searchQuery)) return 30;
+        // Timezone path match
+        if (tz.includes(searchQuery)) return 20;
+        return 10;
+      };
+
+      // Check timezone aliases first (Hawaii, Alaska, PST, etc.)
+      let aliasResults = [];
+      for (const [alias, aliasData] of Object.entries(TIMEZONE_ALIASES)) {
+        if (alias.includes(q) || q.includes(alias)) {
+          aliasResults.push({ ...aliasData, score: 95 }); // High score for alias match
+        }
+      }
+
+      // Search curated database first (has better names/countries)
+      let curatedResults = CITIES_DATABASE
+        .filter(city => {
+          const name = city.name.toLowerCase().replace(/\s+/g, '');
+          const country = city.country.toLowerCase().replace(/\s+/g, '');
+          const tz = city.timezone.toLowerCase();
+          const abbr = (city.abbr || '').toLowerCase();
+          return name.includes(q) || country.includes(q) || tz.includes(q) || abbr.includes(q);
+        })
+        .filter(city => !aliasResults.some(a => a.timezone === city.timezone && a.name === city.name))
+        .map(city => ({ ...city, score: scoreResult(city, q) }));
+
+      // Search ALL IANA timezones (400+ locations worldwide)
+      let ianaResults = ALL_TIMEZONES
+        .filter(tz => {
+          const tzLower = tz.toLowerCase().replace(/_/g, '');
+          return tzLower.includes(q);
+        })
+        .filter(tz => !curatedResults.some(r => r.timezone === tz))
+        .map(tz => {
+          const parts = tz.split('/');
+          const cityName = parts[parts.length - 1].replace(/_/g, ' ');
+          const region = getRegionName(tz);
+          const item = {
+            name: cityName,
+            country: region,
+            timezone: tz,
+            abbr: ''
+          };
+          return { ...item, score: scoreResult(item, q) };
+        });
+
+      // Combine and sort by score
+      let allResults = [...aliasResults, ...curatedResults, ...ianaResults]
+        .sort((a, b) => b.score - a.score)
+        .slice(0, 8);
+
+      if (allResults.length === 0) {
+        tzSuggestions.classList.remove('active');
+        return;
+      }
+
+      tzSuggestions.innerHTML = allResults.map(city => `
+        <div class="tz-suggestion" data-city='${JSON.stringify({ name: city.name, country: city.country, timezone: city.timezone, abbr: city.abbr || '' })}'>
+          <span class="tz-suggestion-city">${city.name}${city.country ? ', ' + city.country : ''}</span>
+          <span class="tz-suggestion-info">${getUTCOffset(city.timezone)}</span>
+        </div>
+      `).join('');
+      tzSuggestions.classList.add('active');
+    }
+
+    // Add city
+    function addCity(cityData) {
+      if (cities.some(c => c.timezone === cityData.timezone && c.name === cityData.name)) {
+        return; // Already added
+      }
+      cities.push({ ...cityData, isHome: false });
+      renderCities();
+      tzSearch.value = '';
+      tzSuggestions.classList.remove('active');
+    }
+
+    // Remove city
+    function removeCity(index) {
+      if (cities[index].isHome) return; // Can't remove home
+      cities.splice(index, 1);
+      renderCities();
+    }
+
+    // Set city as home
+    function setAsHome(index) {
+      cities.forEach((c, i) => c.isHome = (i === index));
+      // Move home city to top
+      const homeCity = cities.splice(index, 1)[0];
+      cities.unshift(homeCity);
+      renderCities();
+    }
+
+    // Get slot index from mouse position on hour element
+    function getSlotFromPosition(hourElement, hourIndex, clientX) {
+      const rect = hourElement.getBoundingClientRect();
+      const clickX = clientX - rect.left;
+      const isRightHalf = clickX > rect.width / 2;
+      return hourIndex * 2 + (isRightHalf ? 1 : 0);
+    }
+
+    // Handle mouse down on hour - start drag selection
+    function handleHourMouseDown(hourElement, hourIndex, event) {
+      event.preventDefault();
+      const slotIndex = getSlotFromPosition(hourElement, hourIndex, event.clientX);
+      isDragging = true;
+      dragStartSlot = slotIndex;
+      selectionStart = slotIndex;
+      selectionEnd = slotIndex;
+      // Store absolute times
+      selectionStartTime = getAbsoluteTimeFromSlot(slotIndex);
+      selectionEndTime = getAbsoluteTimeFromSlot(slotIndex);
+
+      // Update selectedDate if selection is on a different day (due to timeline offset)
+      // Also adjust timelineOffset to compensate so slot-to-time mapping stays consistent
+      const selectionDay = new Date(selectionStartTime);
+      selectionDay.setHours(0, 0, 0, 0);
+      const currentDay = new Date(selectedDate);
+      currentDay.setHours(0, 0, 0, 0);
+      if (selectionDay.getTime() !== currentDay.getTime()) {
+        const dayDiff = Math.round((selectionDay - currentDay) / (1000 * 60 * 60 * 24));
+        selectedDate = new Date(selectionDay);
+        timelineOffset -= dayDiff * 24; // Compensate offset to keep slot mapping consistent
+        updateDateDisplay();
+      }
+
+      updateSelection();
+    }
+
+    // Handle mouse move during drag
+    function handleHourMouseMove(hourElement, hourIndex, event) {
+      // Update hover indicator
+      const rect = hourElement.getBoundingClientRect();
+      const clickX = event.clientX - rect.left;
+      const isRightHalf = clickX > rect.width / 2;
+
+      // Clear all hover states on first row only (they sync)
+      document.querySelectorAll('.tz-hour').forEach(h => {
+        h.classList.remove('hover-left', 'hover-right');
+      });
+
+      // Add hover to this hour across all rows
+      const hourIdx = hourElement.dataset.hour;
+      document.querySelectorAll(`.tz-hour[data-hour="${hourIdx}"]`).forEach(h => {
+        h.classList.add(isRightHalf ? 'hover-right' : 'hover-left');
+      });
+
+      // If dragging, update selection
+      if (isDragging) {
+        const slotIndex = getSlotFromPosition(hourElement, hourIndex, event.clientX);
+        selectionEnd = slotIndex;
+        selectionEndTime = getAbsoluteTimeFromSlot(slotIndex);
+        updateSelection();
+      }
+    }
+
+    // Handle mouse up - end drag
+    function handleMouseUp() {
+      isDragging = false;
+      dragStartSlot = null;
+    }
+
+    // Handle mouse leave on timeline area
+    function handleTimelineMouseLeave() {
+      document.querySelectorAll('.tz-hour').forEach(h => {
+        h.classList.remove('hover-left', 'hover-right');
+      });
+    }
+
+    // Update selection visuals
+    function updateSelection() {
+      // Clear all city selection displays
+      document.querySelectorAll('.tz-city-selection').forEach(el => {
+        el.innerHTML = '';
+        el.classList.remove('active');
+      });
+      document.querySelectorAll('.tz-city-current').forEach(el => {
+        el.style.display = '';
+      });
+
+      // Clear cell highlights
+      document.querySelectorAll('.tz-hour').forEach(h => {
+        h.classList.remove('selected', 'in-range', 'selected-left', 'selected-right', 'selected-full');
+      });
+
+      // Check if we have a selection (using absolute times as source of truth)
+      if (selectionStartTime === null) {
+        tzSelectionInfo.classList.remove('active');
+        tzStartTimeInput.value = '';
+        tzEndTimeInput.value = '';
+        selectionStart = null;
+        selectionEnd = null;
+        return;
+      }
+
+      const start = Math.min(selectionStart, selectionEnd ?? selectionStart);
+      const end = Math.max(selectionStart, selectionEnd ?? selectionStart);
+      const slotCount = end - start + 1;
+
+      // Calculate duration in hours and minutes (each slot is 30 min)
+      const totalMinutes = slotCount * 30;
+      const durationHours = Math.floor(totalMinutes / 60);
+      const durationMins = totalMinutes % 60;
+      let durationStr = '';
+      if (durationHours > 0 && durationMins > 0) {
+        durationStr = `${durationHours}h ${durationMins}m`;
+      } else if (durationHours > 0) {
+        durationStr = durationHours === 1 ? '1 hour' : `${durationHours} hours`;
+      } else {
+        durationStr = '30 min';
+      }
+
+      // Format times using slot indices
+      const startTimeStr = formatTimeWithHalf(start);
+      const endTimeStr = formatTimeWithHalf(end + 1, true); // +1 because end is inclusive, true = isEndTime
+
+      // Update time inputs
+      tzStartTimeInput.value = startTimeStr;
+      tzEndTimeInput.value = endTimeStr;
+      tzSelectionDuration.textContent = `(${durationStr})`;
+      tzSelectionInfo.classList.add('active');
+
+      // Update city selection displays (always show, even if slots out of visual range)
+      const homeTimezone = cities[0].timezone;
+      document.querySelectorAll('.tz-city-selection').forEach(el => {
+        const cityTz = el.dataset.cityTz;
+        const sel = getSelectionForCity(cityTz, homeTimezone);
+        if (sel) {
+          // Hide current time, show selection
+          const row = el.closest('.tz-city-row');
+          const currentDisplay = row.querySelector('.tz-city-current');
+          if (currentDisplay) currentDisplay.style.display = 'none';
+
+          // Build selection display
+          let dateDisplay;
+          const crossesDay = !sel.sameDate;
+          if (sel.sameDate) {
+            dateDisplay = sel.startDate;
+          } else {
+            dateDisplay = `${sel.startDate} - ${sel.endDate}`;
+          }
+
+          el.innerHTML = `
+            <div class="tz-selection-time">${sel.startTime} - ${sel.endTime}</div>
+            <div class="tz-selection-date ${crossesDay ? 'crosses-day' : ''}">${dateDisplay}</div>
+          `;
+          el.classList.add('active');
+        }
+      });
+
+      // Only highlight cells if selection is within visible range (0-47)
+      const isStartVisible = start >= 0 && start <= 47;
+      const isEndVisible = end >= 0 && end <= 47;
+
+      if (isStartVisible || isEndVisible) {
+        const homeTimezone = cities[0].timezone;
+
+        // Update hour visuals for each city row separately (to handle minute offsets)
+        document.querySelectorAll('.tz-city-row').forEach(row => {
+          const cityTimezone = row.dataset.timezone;
+          const timeline = row.querySelector('.tz-timeline');
+          if (!timeline) return;
+
+          // Calculate minute offset for this city (0, 15, 30, 45 etc.)
+          const offsetMinutes = getOffsetBetweenTimezones(homeTimezone, cityTimezone);
+          const minuteOffset = ((offsetMinutes % 60) + 60) % 60;
+          const slotOffset = minuteOffset / 30; // Convert to slot offset (0, 0.5, 1, 1.5)
+
+          // Adjust selection slots for this city's minute offset
+          const adjStart = start + slotOffset;
+          const adjEnd = end + slotOffset;
+
+          // Clamp to visible range for highlighting
+          const visibleStart = Math.max(0, adjStart);
+          const visibleEnd = Math.min(47, adjEnd);
+
+          // Convert slot indices to hour indices for visual highlighting
+          const startHour = Math.floor(visibleStart / 2);
+          const startIsHalf = visibleStart % 2 >= 0.5; // Handle fractional slots
+          const endHour = Math.floor(visibleEnd / 2);
+          const endIsHalf = visibleEnd % 2 >= 0.5;
+
+          const hours = timeline.querySelectorAll('.tz-hour');
+          hours.forEach((hour, idx) => {
+            if (idx >= startHour && idx <= endHour) {
+              // Determine which half-cell classes to add
+              if (startHour === endHour) {
+                // Single hour selection
+                if (startIsHalf && endIsHalf) {
+                  hour.classList.add('selected', 'selected-right');
+                } else if (!startIsHalf && !endIsHalf) {
+                  hour.classList.add('selected', 'selected-left');
+                } else {
+                  hour.classList.add('selected', 'selected-full');
+                }
+              } else if (idx === startHour) {
+                // Start hour
+                hour.classList.add('selected');
+                if (startIsHalf) {
+                  hour.classList.add('selected-right');
+                } else {
+                  hour.classList.add('selected-full');
+                }
+              } else if (idx === endHour) {
+                // End hour
+                hour.classList.add('selected');
+                if (endIsHalf) {
+                  hour.classList.add('selected-full');
+                } else {
+                  hour.classList.add('selected-left');
+                }
+              } else {
+                // Middle hours
+                hour.classList.add('in-range', 'selected-full');
+              }
+            }
+          });
+        });
+      }
+    }
+
+    // Clear selection
+    function clearSelection() {
+      selectionStart = null;
+      selectionEnd = null;
+      selectionStartTime = null;
+      selectionEndTime = null;
+      updateSelection();
+    }
+
+    // Calculate selection time range for a specific city
+    function getSelectionForCity(cityTimezone, homeTimezone) {
+      if (selectionStart === null) return null;
+
+      const start = Math.min(selectionStart, selectionEnd ?? selectionStart);
+      const end = Math.max(selectionStart, selectionEnd ?? selectionStart);
+
+      // Calculate home times
+      const homeStartHour = Math.floor(start / 2) + timelineOffset;
+      const homeStartMin = (start % 2) * 30;
+      const homeEndHour = Math.floor((end + 1) / 2) + timelineOffset;
+      const homeEndMin = ((end + 1) % 2) * 30;
+
+      // Create Date objects for start/end in home timezone
+      const startDate = new Date(selectedDate);
+      startDate.setHours(homeStartHour, homeStartMin, 0, 0);
+      const endDate = new Date(selectedDate);
+      endDate.setHours(homeEndHour, homeEndMin, 0, 0);
+
+      // Get offset from home to city in minutes
+      const offsetMinutes = getOffsetBetweenTimezones(homeTimezone, cityTimezone);
+
+      // Calculate city times
+      const cityStartMs = startDate.getTime() + offsetMinutes * 60000;
+      const cityEndMs = endDate.getTime() + offsetMinutes * 60000;
+      const cityStartTime = new Date(cityStartMs);
+      const cityEndTime = new Date(cityEndMs);
+
+      // Format time
+      const formatTime = (date) => {
+        const hour = date.getHours();
+        const min = date.getMinutes();
+        const h = hour % 12 || 12;
+        const period = hour < 12 ? 'am' : 'pm';
+        const minStr = min === 0 ? '' : `:${min.toString().padStart(2, '0')}`;
+        return `${h}${minStr}${period}`;
+      };
+
+      // Format date
+      const formatDate = (date) => {
+        return date.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
+      };
+
+      // If end time is exactly 12:00 AM (midnight), show 11:59 PM of previous day instead
+      let adjustedCityEndTime = cityEndTime;
+      if (cityEndTime.getHours() === 0 && cityEndTime.getMinutes() === 0) {
+        adjustedCityEndTime = new Date(cityEndTime.getTime() - 60000); // Subtract 1 minute
+      }
+
+      const startTimeStr = formatTime(cityStartTime);
+      const endTimeStr = formatTime(adjustedCityEndTime);
+      const startDateStr = formatDate(cityStartTime);
+      const endDateStr = formatDate(adjustedCityEndTime);
+
+      // Check if dates are different
+      const sameDate = startDateStr === endDateStr;
+
+      return {
+        startTime: startTimeStr,
+        endTime: endTimeStr,
+        startDate: startDateStr,
+        endDate: endDateStr,
+        sameDate,
+        cityStartTime,
+        cityEndTime
+      };
+    }
+
+    // Shift timeline by 8 hours
+    function shiftTimeline(direction) {
+      timelineOffset += direction * 8;
+      // Keep offset within reasonable bounds (-48 to +48 hours)
+      timelineOffset = Math.max(-48, Math.min(48, timelineOffset));
+
+      // Recalculate slot indices from absolute times (if we have a selection)
+      if (selectionStartTime !== null) {
+        selectionStart = getSlotFromAbsoluteTime(selectionStartTime);
+        selectionEnd = selectionEndTime ? getSlotFromAbsoluteTime(selectionEndTime) : selectionStart;
+      }
+
+      renderCities();
+    }
+
+    // Convert absolute time to slot index based on current timelineOffset
+    function getSlotFromAbsoluteTime(time) {
+      const baseDate = new Date(selectedDate);
+      baseDate.setHours(timelineOffset, 0, 0, 0);
+      const diffMs = time.getTime() - baseDate.getTime();
+      const diffMinutes = diffMs / 60000;
+      const slot = Math.floor(diffMinutes / 30);
+      return slot;
+    }
+
+    // Convert slot index to absolute time
+    function getAbsoluteTimeFromSlot(slot) {
+      const time = new Date(selectedDate);
+      const hour = Math.floor(slot / 2) + timelineOffset;
+      const min = (slot % 2) * 30;
+      time.setHours(hour, min, 0, 0);
+      return time;
+    }
+
+    // Render cities
+    function renderCities() {
+      const now = new Date();
+      const homeTimezone = cities[0].timezone;
+
+      tzCities.innerHTML = cities.map((city, cityIndex) => {
+        // Calculate precise offset from home city in MINUTES
+        const offsetMinutes = getOffsetBetweenTimezones(homeTimezone, city.timezone);
+        const offsetHours = offsetMinutes / 60;
+
+        // Format offset string for display
+        let offsetStr = '';
+        if (offsetMinutes !== 0) {
+          const absHours = Math.floor(Math.abs(offsetMinutes) / 60);
+          const absMins = Math.abs(offsetMinutes) % 60;
+          const sign = offsetMinutes > 0 ? '+' : '-';
+          if (absMins === 0) {
+            offsetStr = `${sign}${absHours}h`;
+          } else {
+            offsetStr = `${sign}${absHours}:${absMins.toString().padStart(2, '0')}`;
+          }
+        }
+
+        // Current time in city
+        const cityNow = new Date(now.toLocaleString('en-US', { timeZone: city.timezone }));
+        const cityHour = cityNow.getHours();
+        const cityMinute = cityNow.getMinutes();
+        const ampm = cityHour < 12 ? 'am' : 'pm';
+        const displayHour = cityHour % 12 || 12;
+        const currentTimeStr = `${displayHour}:${cityMinute.toString().padStart(2, '0')} ${ampm}`;
+
+        // Date info
+        const cityDate = cityNow.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
+
+        // Generate 24-hour timeline with proper minute-precision offset
+        let timeline = '';
+        let dayMarkers = []; // Track day change positions
+
+        for (let h = 0; h < 24; h++) {
+          // Create a date for this hour in the HOME timezone
+          const homeDate = new Date(selectedDate);
+          homeDate.setHours(h + timelineOffset, 0, 0, 0);
+
+          // Calculate what time it is in THIS city at this home time
+          // Add the offset in minutes
+          const cityTimeMs = homeDate.getTime() + offsetMinutes * 60000;
+          const cityTime = new Date(cityTimeMs);
+
+          const cityHourVal = cityTime.getHours();
+          const cityMins = cityTime.getMinutes();
+          const cityDay = cityTime.toLocaleDateString('en-US', { weekday: 'short' });
+          const cityMonth = cityTime.getMonth() + 1;
+          const cityDate = cityTime.getDate();
+          const cityDayWithDate = `${cityDay} ${cityMonth}/${cityDate}`;
+
+          // Check if this is where day changes (only check at hour boundaries)
+          if (h > 0) {
+            const prevHomeDate = new Date(selectedDate);
+            prevHomeDate.setHours(h - 1 + timelineOffset, 0, 0, 0);
+            const prevCityTimeMs = prevHomeDate.getTime() + offsetMinutes * 60000;
+            const prevCityTime = new Date(prevCityTimeMs);
+            const prevCityDay = prevCityTime.toLocaleDateString('en-US', { weekday: 'short' });
+            if (cityDay !== prevCityDay) {
+              dayMarkers.push({ position: h, day: cityDayWithDate });
+            }
+          }
+
+          // Format the hour display - account for half-hour offset timezones
+          let displayHourVal = cityHourVal;
+          let displayMins = cityMins;
+
+          const { time, period } = formatHour(displayHourVal);
+          const hourClass = getHourClass(displayHourVal);
+
+          // Current hour marker only on home city, using home timezone current hour
+          const homeNow = new Date(now.toLocaleString('en-US', { timeZone: homeTimezone }));
+          const homeNowHour = homeNow.getHours();
+          const homeNowMins = homeNow.getMinutes();
+          const isCurrentHome = (city.isHome && (h + timelineOffset) === homeNowHour);
+
+          // For current hour, show minutes instead of AM/PM
+          const displayPeriod = isCurrentHome ? `:${homeNowMins.toString().padStart(2, '0')}` : period;
+
+          timeline += `
+            <div class="tz-hour ${hourClass} ${isCurrentHome ? 'current-home' : ''} show-label" data-city="${cityIndex}" data-hour="${h}">
+              <span class="tz-hour-time">${time}</span><span class="tz-hour-period">${displayPeriod}</span>
+            </div>
+          `;
+        }
+
+        // Build day markers HTML (positioned absolutely)
+        const dayMarkersHtml = dayMarkers.map(m =>
+          `<span class="tz-day-marker" style="left: calc(${m.position} * (100% / 24))">${m.day}</span>`
+        ).join('');
+
+        return `
+          <div class="tz-city-row" data-city-index="${cityIndex}" data-timezone="${city.timezone}">
+            <div class="tz-city-info">
+              <div class="tz-city-header">
+                <span class="tz-city-name" data-index="${cityIndex}">${city.name}</span>
+                ${city.abbr ? `<span class="tz-city-offset">${city.abbr}</span>` : ''}
+              </div>
+              <div class="tz-city-current">
+                <div class="tz-city-time-line">${currentTimeStr}</div>
+                <div class="tz-city-date-line">${cityDate}</div>
+              </div>
+              <div class="tz-city-selection" data-city-tz="${city.timezone}"></div>
+              <div class="tz-city-actions">
+                ${!city.isHome ? `<button class="tz-set-home" data-index="${cityIndex}" title="Set as home"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></button>` : ''}
+                ${!city.isHome ? `<button class="tz-city-remove" data-index="${cityIndex}">×</button>` : ''}
+              </div>
+            </div>
+            <div class="tz-timeline-container">
+              <button class="tz-shift-btn tz-shift-left" data-direction="-1"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg></button>
+              <div class="tz-timeline">${timeline}</div>
+              <div class="tz-day-markers">${dayMarkersHtml}</div>
+              <button class="tz-shift-btn tz-shift-right" data-direction="1"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg></button>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      // Add drag selection event listeners
+      document.querySelectorAll('.tz-hour').forEach(hour => {
+        const hourIdx = parseInt(hour.dataset.hour);
+
+        hour.addEventListener('mousedown', (e) => {
+          handleHourMouseDown(hour, hourIdx, e);
+        });
+
+        hour.addEventListener('mousemove', (e) => {
+          handleHourMouseMove(hour, hourIdx, e);
+        });
+      });
+
+      // Mouse leave on timeline
+      document.querySelectorAll('.tz-timeline').forEach(timeline => {
+        timeline.addEventListener('mouseleave', handleTimelineMouseLeave);
+      });
+
+      // Add event listeners for remove buttons
+      document.querySelectorAll('.tz-city-remove').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          removeCity(parseInt(btn.dataset.index));
+        });
+      });
+
+      // Add event listeners for set home buttons
+      document.querySelectorAll('.tz-set-home').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          setAsHome(parseInt(btn.dataset.index));
+        });
+      });
+
+      // Add click on city name to set as home
+      document.querySelectorAll('.tz-city-name').forEach(name => {
+        name.addEventListener('click', (e) => {
+          const idx = parseInt(name.dataset.index);
+          if (idx > 0) {
+            setAsHome(idx);
+          }
+        });
+      });
+
+      // Add event listeners for shift buttons
+      document.querySelectorAll('.tz-shift-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const direction = parseInt(btn.dataset.direction);
+          shiftTimeline(direction);
+        });
+      });
+
+      // Restore selection if any
+      updateSelection();
+    }
+
+    // Event listeners
+    dateTimeEl.addEventListener('click', openTzModal);
+    tzClose.addEventListener('click', closeTzModal);
+    tzOverlay.addEventListener('click', (e) => {
+      if (e.target === tzOverlay) closeTzModal();
+    });
+
+    tzSearch.addEventListener('input', (e) => searchCities(e.target.value));
+    tzSearch.addEventListener('focus', () => {
+      if (tzSearch.value.length >= 2) searchCities(tzSearch.value);
+    });
+
+    tzSuggestions.addEventListener('click', (e) => {
+      const suggestion = e.target.closest('.tz-suggestion');
+      if (suggestion) {
+        const cityData = JSON.parse(suggestion.dataset.city);
+        addCity(cityData);
+      }
+    });
+
+    document.addEventListener('click', (e) => {
+      if (!e.target.closest('.tz-search-container')) {
+        tzSuggestions.classList.remove('active');
+      }
+    });
+
+    // Date navigation
+    tzDatePrev.addEventListener('click', () => navigateDate(-1));
+    tzDateNext.addEventListener('click', () => navigateDate(1));
+    tzDateToday.addEventListener('click', () => {
+      selectedDate = new Date();
+      updateDateDisplay();
+      renderCities();
+    });
+
+    // Calendar toggle
+    tzDateDisplay.addEventListener('click', toggleCalendar);
+    tzCalPrevMonth.addEventListener('click', () => {
+      calendarViewDate.setMonth(calendarViewDate.getMonth() - 1);
+      renderCalendar();
+    });
+    tzCalNextMonth.addEventListener('click', () => {
+      calendarViewDate.setMonth(calendarViewDate.getMonth() + 1);
+      renderCalendar();
+    });
+
+    // Close calendar when clicking outside
+    document.addEventListener('click', (e) => {
+      if (!e.target.closest('.tz-calendar-wrapper')) {
+        tzCalendar.classList.remove('active');
+      }
+    });
+
+    // Global mouseup to end drag
+    document.addEventListener('mouseup', handleMouseUp);
+
+    // Clear selection button
+    tzClearSelection.addEventListener('click', clearSelection);
+
+    // Parse time string to slot index
+    function parseTimeToSlot(timeStr) {
+      if (!timeStr) return null;
+      const str = timeStr.toLowerCase().trim();
+
+      // Try various formats:
+      // "3pm", "3:30pm", "3 pm", "3:30 pm", "15:00", "15:30", "3", "330pm", "1530"
+      let hour = null;
+      let min = 0;
+      let period = null;
+
+      // Format: "3pm", "3am", "3 pm", "3 am" (no colon, no minutes)
+      let match = str.match(/^(\d{1,2})\s*(am|pm)$/);
+      if (match) {
+        hour = parseInt(match[1]);
+        period = match[2];
+      }
+
+      // Format: "3:30pm", "3:30 pm", "3:00am"
+      if (hour === null) {
+        match = str.match(/^(\d{1,2}):(\d{2})\s*(am|pm)?$/);
+        if (match) {
+          hour = parseInt(match[1]);
+          min = parseInt(match[2]);
+          period = match[3] || null;
+        }
+      }
+
+      // Format: "330pm", "330am" (no colon)
+      if (hour === null) {
+        match = str.match(/^(\d{1,2})(\d{2})\s*(am|pm)$/);
+        if (match) {
+          hour = parseInt(match[1]);
+          min = parseInt(match[2]);
+          period = match[3];
+        }
+      }
+
+      // Format: "1530", "1500" (24h no colon)
+      if (hour === null) {
+        match = str.match(/^(\d{2})(\d{2})$/);
+        if (match) {
+          hour = parseInt(match[1]);
+          min = parseInt(match[2]);
+        }
+      }
+
+      // Format: just a number like "3" or "15"
+      if (hour === null) {
+        match = str.match(/^(\d{1,2})$/);
+        if (match) {
+          hour = parseInt(match[1]);
+        }
+      }
+
+      if (hour === null) return null;
+
+      // Handle 12-hour format
+      if (period === 'pm' && hour !== 12) hour += 12;
+      if (period === 'am' && hour === 12) hour = 0;
+
+      // Validate
+      if (hour < 0 || hour > 23) return null;
+
+      // Round minutes to nearest half hour
+      if (min !== 0 && min !== 30) {
+        if (min >= 15 && min < 45) {
+          min = 30;
+        } else if (min >= 45) {
+          min = 0;
+          hour = (hour + 1) % 24;
+        } else {
+          min = 0;
+        }
+      }
+
+      return hour * 2 + (min === 30 ? 1 : 0);
+    }
+
+    // Handle time input changes
+    function handleTimeInputChange() {
+      const startSlot = parseTimeToSlot(tzStartTimeInput.value);
+      const endSlot = parseTimeToSlot(tzEndTimeInput.value);
+
+      if (startSlot !== null && endSlot !== null && startSlot < endSlot) {
+        selectionStart = startSlot;
+        selectionEnd = endSlot - 1; // -1 because end is inclusive
+        selectionStartTime = getAbsoluteTimeFromSlot(selectionStart);
+        selectionEndTime = getAbsoluteTimeFromSlot(selectionEnd);
+        updateSelection();
+        renderCities(); // Re-render to show visual selection
+      }
+    }
+
+    tzStartTimeInput.addEventListener('change', handleTimeInputChange);
+    tzEndTimeInput.addEventListener('change', handleTimeInputChange);
+    tzStartTimeInput.addEventListener('blur', handleTimeInputChange);
+    tzEndTimeInput.addEventListener('blur', handleTimeInputChange);
+
+    // Track if arrow keys are being used (to prevent blur handler interference)
+    let arrowKeyActive = false;
+
+    tzStartTimeInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') handleTimeInputChange();
+      if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
+        e.preventDefault();
+        e.stopPropagation();
+        arrowKeyActive = true;
+        const delta = e.key === 'ArrowUp' ? 1 : -1; // +1 slot = +30 min
+        if (selectionStart !== null) {
+          const newStart = Math.max(0, Math.min(47, selectionStart + delta));
+          // Don't let start go past end
+          if (selectionEnd === null || newStart <= selectionEnd) {
+            selectionStart = newStart;
+            selectionStartTime = getAbsoluteTimeFromSlot(selectionStart);
+            updateSelection();
+          }
+        }
+        setTimeout(() => { arrowKeyActive = false; }, 100);
+      }
+    });
+    tzEndTimeInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') handleTimeInputChange();
+      if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
+        e.preventDefault();
+        e.stopPropagation();
+        arrowKeyActive = true;
+        const delta = e.key === 'ArrowUp' ? 1 : -1; // +1 slot = +30 min
+        if (selectionEnd !== null) {
+          const newEnd = Math.max(0, Math.min(47, selectionEnd + delta));
+          // Don't let end go before start
+          if (selectionStart === null || newEnd >= selectionStart) {
+            selectionEnd = newEnd;
+            selectionEndTime = getAbsoluteTimeFromSlot(selectionEnd);
+            updateSelection();
+          }
+        }
+        setTimeout(() => { arrowKeyActive = false; }, 100);
+      }
+    });
+
+    // Copy to clipboard
+    tzCopySelection.addEventListener('click', () => {
+      if (selectionStart === null) return;
+
+      const start = Math.min(selectionStart, selectionEnd ?? selectionStart);
+      const end = Math.max(selectionStart, selectionEnd ?? selectionStart);
+
+      // Calculate actual start/end times in home timezone
+      const homeStartHour = Math.floor(start / 2) + timelineOffset;
+      const homeStartMin = (start % 2) * 30;
+      const homeEndHour = Math.floor((end + 1) / 2) + timelineOffset;
+      const homeEndMin = ((end + 1) % 2) * 30;
+
+      // Create Date objects for start/end in home timezone
+      const startDate = new Date(selectedDate);
+      startDate.setHours(homeStartHour, homeStartMin, 0, 0);
+      const endDate = new Date(selectedDate);
+      endDate.setHours(homeEndHour, homeEndMin, 0, 0);
+
+      // Helper to format date
+      const formatDate = (date) => date.toLocaleDateString('en-US', {
+        weekday: 'short',
+        month: 'short',
+        day: 'numeric',
+        year: 'numeric'
+      });
+
+      // Build text for each city with their specific dates
+      let text = '';
+
+      cities.forEach(city => {
+        // Get precise offset from home timezone in MINUTES
+        const offsetMinutes = getOffsetBetweenTimezones(cities[0].timezone, city.timezone);
+
+        // Calculate city times by adding offset
+        const cityStartMs = startDate.getTime() + offsetMinutes * 60000;
+        const cityEndMs = endDate.getTime() + offsetMinutes * 60000;
+        const cityStartTime = new Date(cityStartMs);
+        const cityEndTime = new Date(cityEndMs);
+
+        // Format city times
+        const formatCityTime = (date) => {
+          const hour = date.getHours();
+          const min = date.getMinutes();
+          const h = hour % 12 || 12;
+          const period = hour < 12 ? 'am' : 'pm';
+          const minStr = min === 0 ? '' : `:${min.toString().padStart(2, '0')}`;
+          return `${h}${minStr}${period}`;
+        };
+
+        // If end time is exactly midnight, show 11:59pm instead
+        let adjustedCityEndTime = cityEndTime;
+        if (cityEndTime.getHours() === 0 && cityEndTime.getMinutes() === 0) {
+          adjustedCityEndTime = new Date(cityEndTime.getTime() - 60000);
+        }
+
+        const startTimeStr = formatCityTime(cityStartTime);
+        const endTimeStr = formatCityTime(adjustedCityEndTime);
+
+        // Get dates for this city
+        const cityStartDateStr = formatDate(cityStartTime);
+        const cityEndDateStr = formatDate(adjustedCityEndTime);
+
+        // Check if start and end dates are the same
+        const sameDate = cityStartDateStr === cityEndDateStr;
+
+        if (sameDate) {
+          text += `${city.name}: ${startTimeStr} - ${endTimeStr}, ${cityStartDateStr}\n`;
+        } else {
+          text += `${city.name}: ${startTimeStr} ${cityStartDateStr} - ${endTimeStr} ${cityEndDateStr}\n`;
+        }
+      });
+
+      navigator.clipboard.writeText(text.trim()).then(() => {
+        // Show toast
+        tzCopyToast.classList.add('show');
+        setTimeout(() => tzCopyToast.classList.remove('show'), 2000);
+      });
+    });
+
+    // ESC key to close
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && tzOverlay.classList.contains('active')) {
+        closeTzModal();
+      }
+    });
   </script>
 
 </body>
