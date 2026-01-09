@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git add:*)",
+      "Bash(git commit -m \"$\\(cat <<''EOF''\nFix Bitcoin Power Law parameters to match b1m.io exactly\n\n- Update exponent: 5.566 → 5.616314045\n- Update intercept: -1.799 → -1.847796462\n- Update displayed formula to show correct rounded values\n\n🤖 Generated with [Claude Code]\\(https://claude.com/claude-code\\)\n\nCo-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>\nEOF\n\\)\")",
+      "Bash(git push)"
+    ]
+  }
+}

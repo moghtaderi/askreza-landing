@@ -2132,7 +2132,7 @@
         </div>
 
         <div class="btc-power-law">
-          <div class="btc-formula">Price = 10<sup>-1.799</sup> × (Days ÷ 365.25)<sup>5.566</sup></div>
+          <div class="btc-formula">Price = 10<sup>-1.848</sup> × (Days ÷ 365.25)<sup>5.616</sup></div>
           <div class="btc-stats">
             <div class="btc-stat">
               <div class="btc-stat-label">Support (0.5×)</div>
@@ -2375,9 +2375,9 @@
 
     // Power law constants from b1m.io model
     // Formula: Price = 10^a × (Days/365.25)^b
-    // Using β = 5.566 and intercept calibrated to match b1m.io fair value ($112,618)
-    const POWER_LAW_EXPONENT = 5.566;
-    const POWER_LAW_LOG_INTERCEPT = -1.799;
+    // Using exact b1m.io parameters
+    const POWER_LAW_EXPONENT = 5.616314045;
+    const POWER_LAW_LOG_INTERCEPT = -1.847796462;
     const POWER_LAW_CONSTANT = Math.pow(10, POWER_LAW_LOG_INTERCEPT);
     // Support at 0.5× fair value, Resistance at 3× fair value (per b1m.io bands)
     const SUPPORT_MULTIPLIER = 0.5;
