@@ -259,6 +259,11 @@
     .btc-price {
       font-variant-numeric: tabular-nums;
       transition: color 0.3s;
+      cursor: pointer;
+    }
+
+    .btc-price:hover {
+      color: var(--accent);
     }
 
     .btc-price.flash-green {
@@ -267,6 +272,687 @@
 
     .btc-price.flash-red {
       color: #ff6b6b;
+    }
+
+    /* Bitcoin Power Law Modal */
+    .btc-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(8px);
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.3s, visibility 0.3s;
+    }
+
+    .btc-overlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .btc-modal {
+      background: var(--bg);
+      border: 1px solid rgba(247, 147, 26, 0.2);
+      border-radius: 12px;
+      width: 95%;
+      max-width: 600px;
+      max-height: 90vh;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      animation: modalSlideUp 0.3s ease-out;
+      box-shadow: 0 0 60px rgba(247, 147, 26, 0.08), 0 25px 50px rgba(0, 0, 0, 0.5);
+    }
+
+    .btc-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.25rem 1.5rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      background: linear-gradient(180deg, rgba(247, 147, 26, 0.08) 0%, transparent 100%);
+    }
+
+    .btc-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .btc-logo svg {
+      flex-shrink: 0;
+    }
+
+    .btc-modal-title {
+      font-family: var(--serif);
+      font-size: 1.25rem;
+      color: var(--fg);
+    }
+
+    .btc-close {
+      background: none;
+      border: none;
+      color: var(--muted);
+      font-size: 1.5rem;
+      cursor: pointer;
+      padding: 0.25rem;
+      line-height: 1;
+      transition: color 0.3s;
+    }
+
+    .btc-close:hover {
+      color: #f7931a;
+    }
+
+    .btc-controls {
+      display: flex;
+      gap: 1rem;
+      padding: 1rem 1.5rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .btc-date-picker {
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+    }
+
+    .btc-date-btn {
+      background: none;
+      border: none;
+      color: var(--muted);
+      font-size: 1.25rem;
+      cursor: pointer;
+      padding: 0.25rem 0.5rem;
+      transition: color 0.2s;
+      line-height: 1;
+    }
+
+    .btc-date-btn:hover {
+      color: #f7931a;
+    }
+
+    .btc-date-display {
+      font-family: var(--mono);
+      font-size: 0.85rem;
+      color: var(--fg);
+      padding: 0.4rem 0.75rem;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 4px;
+      cursor: pointer;
+      min-width: 120px;
+      text-align: center;
+      transition: background 0.2s;
+    }
+
+    .btc-date-display:hover {
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .btc-date-today {
+      font-size: 0.75rem;
+      color: #f7931a;
+      cursor: pointer;
+      padding: 0.25rem 0.5rem;
+      margin-left: 0.5rem;
+      transition: opacity 0.2s;
+      display: none;
+    }
+
+    .btc-date-today.visible {
+      display: inline;
+    }
+
+    .btc-date-today:hover {
+      opacity: 0.8;
+    }
+
+    .btc-calendar-wrapper {
+      position: relative;
+    }
+
+    .btc-calendar {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      background: #151515;
+      border: 1px solid rgba(247, 147, 26, 0.2);
+      border-radius: 8px;
+      padding: 1rem;
+      margin-top: 0.5rem;
+      z-index: 20;
+      min-width: 280px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5), 0 0 20px rgba(247, 147, 26, 0.05);
+    }
+
+    .btc-calendar.active {
+      display: block;
+    }
+
+    .btc-calendar-year-nav {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      margin-bottom: 0.75rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .btc-calendar-year-nav button {
+      background: none;
+      border: none;
+      color: var(--muted);
+      cursor: pointer;
+      padding: 0.25rem 0.5rem;
+      border-radius: 4px;
+      transition: all 0.2s;
+      font-size: 1rem;
+      font-weight: bold;
+    }
+
+    .btc-calendar-year-nav button:hover {
+      background: rgba(247, 147, 26, 0.15);
+      color: #f7931a;
+    }
+
+    .btc-calendar-year {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #f7931a;
+      min-width: 50px;
+      text-align: center;
+    }
+
+    .btc-calendar-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 0.75rem;
+    }
+
+    .btc-calendar-title {
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: var(--fg);
+    }
+
+    .btc-calendar-nav {
+      display: flex;
+      gap: 0.25rem;
+    }
+
+    .btc-calendar-nav button {
+      background: none;
+      border: none;
+      color: var(--muted);
+      cursor: pointer;
+      padding: 0.25rem 0.5rem;
+      border-radius: 4px;
+      transition: all 0.2s;
+      font-size: 0.9rem;
+    }
+
+    .btc-calendar-nav button:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--fg);
+    }
+
+    .btc-calendar-quick-years {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 0.75rem;
+      padding-top: 0.75rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      justify-content: center;
+    }
+
+    .btc-quick-year {
+      font-size: 0.7rem;
+      padding: 0.3rem 0.5rem;
+      background: rgba(255, 255, 255, 0.05);
+      border: none;
+      border-radius: 4px;
+      color: var(--muted);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btc-quick-year:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--fg);
+    }
+
+    .btc-quick-year.active {
+      background: #f7931a;
+      color: var(--bg);
+    }
+
+    .btc-calendar-weekdays {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 2px;
+      margin-bottom: 0.25rem;
+    }
+
+    .btc-calendar-weekdays span {
+      text-align: center;
+      font-size: 0.6rem;
+      color: var(--muted);
+      padding: 0.25rem;
+      text-transform: uppercase;
+    }
+
+    .btc-calendar-days {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 2px;
+    }
+
+    .btc-calendar-day {
+      text-align: center;
+      padding: 0.4rem;
+      font-size: 0.75rem;
+      color: var(--muted);
+      cursor: pointer;
+      border-radius: 4px;
+      transition: all 0.2s;
+    }
+
+    .btc-calendar-day:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--fg);
+    }
+
+    .btc-calendar-day.today {
+      color: #f7931a;
+      font-weight: 600;
+    }
+
+    .btc-calendar-day.selected {
+      background: #f7931a;
+      color: var(--bg);
+    }
+
+    .btc-calendar-day.other-month {
+      opacity: 0.3;
+    }
+
+    .btc-content {
+      padding: 1.5rem;
+      overflow-y: auto;
+    }
+
+    .btc-current {
+      text-align: center;
+      margin-bottom: 1.5rem;
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .btc-current-label {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--muted);
+      margin-bottom: 0.5rem;
+    }
+
+    .btc-current-price {
+      font-size: 2.5rem;
+      font-family: var(--mono);
+      color: var(--fg);
+      font-weight: 300;
+      text-shadow: 0 0 30px rgba(247, 147, 26, 0.2);
+      transition: color 0.3s ease;
+    }
+
+    .btc-current-price.flash-green {
+      color: var(--accent);
+    }
+
+    .btc-current-price.flash-red {
+      color: #ff6b6b;
+    }
+
+    .btc-deviation {
+      font-size: 0.9rem;
+      margin-top: 0.5rem;
+    }
+
+    .btc-deviation.above {
+      color: var(--accent);
+    }
+
+    .btc-deviation.below {
+      color: #ff6b6b;
+    }
+
+    .btc-price-range {
+      margin-top: 1.5rem;
+      padding: 0 1rem;
+    }
+
+    .btc-range-track {
+      position: relative;
+      height: 2px;
+      background: rgba(255, 255, 255, 0.1);
+      margin-bottom: 0.75rem;
+    }
+
+    .btc-range-track::before,
+    .btc-range-track::after,
+    .btc-range-track .btc-range-mid {
+      content: '';
+      position: absolute;
+      top: -3px;
+      width: 2px;
+      height: 8px;
+      border-radius: 1px;
+    }
+
+    .btc-range-track::before {
+      left: 0;
+      background: rgba(34, 197, 94, 0.5);
+    }
+
+    .btc-range-track .btc-range-mid {
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(247, 147, 26, 0.5);
+    }
+
+    .btc-range-track::after {
+      right: 0;
+      background: rgba(239, 68, 68, 0.5);
+    }
+
+    .btc-range-marker {
+      position: absolute;
+      top: 50%;
+      width: 8px;
+      height: 8px;
+      background: var(--fg);
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      transition: left 0.3s ease-out;
+    }
+
+    .btc-range-labels {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.55rem;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+
+    .btc-range-labels span:first-child { color: rgba(34, 197, 94, 0.5); }
+    .btc-range-labels span:nth-child(2) { color: rgba(247, 147, 26, 0.5); }
+    .btc-range-labels span:last-child { color: rgba(239, 68, 68, 0.5); }
+
+    @keyframes markerPulse {
+      0%, 100% { box-shadow: none; }
+      50% { box-shadow: 0 0 8px rgba(255, 255, 255, 0.3); }
+    }
+
+    .btc-range-marker.animate {
+      animation: markerPulse 2s ease-in-out infinite;
+    }
+
+    .btc-power-law {
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 8px;
+      padding: 1.25rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .btc-section-title {
+      font-family: var(--serif);
+      font-size: 1rem;
+      color: var(--fg);
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .btc-formula {
+      font-family: var(--mono);
+      font-size: 0.75rem;
+      color: var(--muted);
+      background: rgba(0, 0, 0, 0.3);
+      padding: 0.75rem;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin-bottom: 1rem;
+      border-left: 2px solid rgba(247, 147, 26, 0.4);
+      text-align: center;
+    }
+
+    .btc-stats {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+    }
+
+    .btc-stat {
+      text-align: center;
+    }
+
+    .btc-stat-label {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      margin-bottom: 0.25rem;
+    }
+
+    .btc-stat-value {
+      font-family: var(--mono);
+      font-size: 1.1rem;
+      color: var(--fg);
+    }
+
+    .btc-stat-value.support {
+      color: #22c55e;
+    }
+
+    .btc-stat-value.resistance {
+      color: #ef4444;
+    }
+
+    .btc-stat-value.fair {
+      color: #f7931a;
+    }
+
+    .btc-chart {
+      position: relative;
+      height: 200px;
+      background: rgba(255, 255, 255, 0.02);
+      border-radius: 8px;
+      margin-bottom: 1.5rem;
+      overflow: hidden;
+    }
+
+    .btc-chart canvas {
+      width: 100%;
+      height: 100%;
+    }
+
+    .btc-chart-tooltip {
+      position: absolute;
+      background: rgba(21, 21, 21, 0.95);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 6px;
+      padding: 0.5rem 0.75rem;
+      font-size: 0.7rem;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.15s;
+      z-index: 10;
+      white-space: nowrap;
+    }
+
+    .btc-chart-tooltip.visible {
+      opacity: 1;
+    }
+
+    .btc-tooltip-date {
+      color: var(--muted);
+      margin-bottom: 0.25rem;
+    }
+
+    .btc-tooltip-values {
+      display: flex;
+      flex-direction: column;
+      gap: 0.15rem;
+    }
+
+    .btc-tooltip-value {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .btc-tooltip-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+    }
+
+    .btc-tooltip-dot.fair { background: #f7931a; }
+    .btc-tooltip-dot.support { background: #22c55e; }
+    .btc-tooltip-dot.resistance { background: #ef4444; }
+
+    .btc-chart-crosshair {
+      position: absolute;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.15s;
+    }
+
+    .btc-chart-crosshair.visible {
+      opacity: 1;
+    }
+
+    .btc-crosshair-v {
+      position: absolute;
+      width: 1px;
+      height: 100%;
+      background: rgba(255, 255, 255, 0.2);
+      top: 0;
+    }
+
+    .btc-milestones {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1rem;
+      justify-content: center;
+    }
+
+    .btc-milestone {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 1rem 1.5rem;
+      background: linear-gradient(135deg, rgba(247, 147, 26, 0.08) 0%, rgba(247, 147, 26, 0.02) 100%);
+      border: 1px solid rgba(247, 147, 26, 0.15);
+      border-radius: 12px;
+      min-width: 140px;
+    }
+
+    .btc-milestone-price {
+      font-family: Georgia, 'Times New Roman', serif;
+      font-size: 1.75rem;
+      font-weight: 400;
+      color: #f7931a;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.75rem;
+      text-shadow: 0 0 30px rgba(247, 147, 26, 0.3);
+    }
+
+    .btc-milestone-price .unit {
+      font-size: 0.6em;
+    }
+
+    .btc-milestone-dates {
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+      width: 100%;
+    }
+
+    .btc-milestone-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+
+    .btc-milestone-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .btc-milestone-dot.earliest { background: #ef4444; }
+    .btc-milestone-dot.trend { background: #f7931a; }
+
+    .btc-milestone-date {
+      font-family: var(--mono);
+      font-size: 0.75rem;
+      color: rgba(255, 255, 255, 0.7);
+    }
+
+    @media (max-width: 600px) {
+      .btc-milestones {
+        flex-direction: column;
+        align-items: center;
+        gap: 0.75rem;
+      }
+
+      .btc-milestone {
+        min-width: 160px;
+      }
+    }
+
+    .btc-footer {
+      padding: 1rem 1.5rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .btc-credit {
+      font-size: 0.75rem;
+      color: var(--muted);
+    }
+
+    .btc-credit a {
+      color: #f7931a;
+      text-decoration: none;
+    }
+
+    .btc-credit a:hover {
+      text-decoration: underline;
+      color: #ffb347;
+    }
+
+    .btc-days {
+      font-family: var(--mono);
+      font-size: 0.75rem;
+      color: var(--muted);
     }
 
     .datetime {
@@ -307,7 +993,7 @@
 
     .tz-modal {
       background: var(--bg);
-      border: 1px solid rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(196, 248, 100, 0.2);
       border-radius: 12px;
       width: 95%;
       max-width: 900px;
@@ -316,6 +1002,7 @@
       display: flex;
       flex-direction: column;
       animation: modalSlideUp 0.3s ease-out;
+      box-shadow: 0 0 60px rgba(196, 248, 100, 0.06), 0 25px 50px rgba(0, 0, 0, 0.5);
     }
 
     @keyframes modalSlideUp {
@@ -335,6 +1022,7 @@
       align-items: center;
       padding: 1.25rem 1.5rem;
       border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      background: linear-gradient(180deg, rgba(196, 248, 100, 0.06) 0%, transparent 100%);
     }
 
     .tz-logo {
@@ -351,6 +1039,7 @@
       font-family: var(--serif);
       font-size: 1.25rem;
       color: var(--fg);
+      text-shadow: 0 0 30px rgba(196, 248, 100, 0.15);
     }
 
     .tz-close {
@@ -394,7 +1083,7 @@
       font-family: var(--mono);
       font-size: 0.85rem;
       outline: none;
-      transition: border-color 0.3s;
+      transition: border-color 0.3s, box-shadow 0.3s;
     }
 
     .tz-search::placeholder {
@@ -403,6 +1092,7 @@
 
     .tz-search:focus {
       border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(196, 248, 100, 0.1);
     }
 
     .tz-search-icon {
@@ -420,13 +1110,14 @@
       left: 0;
       right: 0;
       background: #151515;
-      border: 1px solid rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(196, 248, 100, 0.15);
       border-radius: 6px;
       margin-top: 4px;
       max-height: 200px;
       overflow-y: auto;
       z-index: 10;
       display: none;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
     }
 
     .tz-suggestions.active {
@@ -465,6 +1156,11 @@
       border: 1px solid rgba(255, 255, 255, 0.1);
       border-radius: 6px;
       padding: 0.25rem;
+      transition: border-color 0.2s;
+    }
+
+    .tz-date-picker:hover {
+      border-color: rgba(196, 248, 100, 0.3);
     }
 
     .tz-date-btn {
@@ -533,12 +1229,12 @@
       top: 100%;
       right: 0;
       margin-top: 0.5rem;
-      background: var(--bg);
-      border: 1px solid rgba(255, 255, 255, 0.15);
+      background: #151515;
+      border: 1px solid rgba(196, 248, 100, 0.15);
       border-radius: 8px;
       padding: 0.75rem;
       z-index: 1000;
-      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6), 0 0 20px rgba(196, 248, 100, 0.03);
       min-width: 280px;
     }
 
@@ -1001,6 +1697,7 @@
     .tz-hour.work {
       background: rgba(100, 200, 130, 0.22);
       color: var(--fg);
+      border-bottom: 2px solid rgba(100, 200, 130, 0.4);
     }
 
     .tz-hour:hover {
@@ -1137,6 +1834,7 @@
 
     .tz-legend-color.work {
       background: rgba(100, 220, 140, 0.25);
+      border-bottom: 2px solid rgba(100, 200, 130, 0.5);
     }
 
     .tz-legend-color.day {
@@ -1249,6 +1947,31 @@
         padding: 0.5rem 1rem;
         flex-wrap: wrap;
       }
+
+      /* BTC modal mobile */
+      .btc-modal {
+        width: 100%;
+        height: 100%;
+        max-height: 100%;
+        border-radius: 0;
+      }
+
+      .btc-stats {
+        grid-template-columns: 1fr;
+      }
+
+      .btc-current-price {
+        font-size: 2rem;
+      }
+
+      .btc-controls {
+        padding: 0.75rem 1rem;
+      }
+
+      .btc-date-display {
+        min-width: 100px;
+        font-size: 0.8rem;
+      }
     }
   </style>
 </head>
@@ -1348,6 +2071,139 @@
     </div>
   </div>
 
+  <!-- Bitcoin Power Law Modal -->
+  <div class="btc-overlay" id="btc-overlay">
+    <div class="btc-modal">
+      <div class="btc-header">
+        <div class="btc-logo">
+          <svg width="32" height="32" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" style="transform: rotate(15deg);">
+            <circle cx="50" cy="50" r="45" stroke="#f7931a" stroke-width="4" fill="none"/>
+            <text x="50" y="68" text-anchor="middle" fill="#f7931a" font-size="55" font-weight="bold" font-family="Arial">₿</text>
+          </svg>
+          <span class="btc-modal-title">Bitcoin Power Law Model</span>
+        </div>
+        <button class="btc-close" id="btc-close">&times;</button>
+      </div>
+      <div class="btc-controls">
+        <div class="btc-date-picker btc-calendar-wrapper">
+          <button class="btc-date-btn" id="btc-date-prev">‹</button>
+          <span class="btc-date-display" id="btc-date-display">Today</span>
+          <button class="btc-date-btn" id="btc-date-next">›</button>
+          <span class="btc-date-today" id="btc-date-today">Today</span>
+          <div class="btc-calendar" id="btc-calendar">
+            <div class="btc-calendar-year-nav">
+              <button id="btc-cal-prev-year">«</button>
+              <span class="btc-calendar-year" id="btc-calendar-year">2026</span>
+              <button id="btc-cal-next-year">»</button>
+            </div>
+            <div class="btc-calendar-header">
+              <div class="btc-calendar-nav">
+                <button id="btc-cal-prev-month">‹</button>
+              </div>
+              <span class="btc-calendar-title" id="btc-calendar-title">January</span>
+              <div class="btc-calendar-nav">
+                <button id="btc-cal-next-month">›</button>
+              </div>
+            </div>
+            <div class="btc-calendar-weekdays">
+              <span>Sun</span><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span>
+            </div>
+            <div class="btc-calendar-days" id="btc-calendar-days"></div>
+            <div class="btc-calendar-quick-years" id="btc-quick-years"></div>
+          </div>
+        </div>
+      </div>
+      <div class="btc-content">
+        <div class="btc-current">
+          <div class="btc-current-label">Current Price</div>
+          <div class="btc-current-price" id="btc-modal-price">$--</div>
+          <div class="btc-deviation" id="btc-deviation">--</div>
+          <div class="btc-price-range" id="btc-price-range">
+            <div class="btc-range-track">
+              <div class="btc-range-mid"></div>
+              <div class="btc-range-marker" id="btc-range-marker"></div>
+            </div>
+            <div class="btc-range-labels">
+              <span>Support</span>
+              <span>Fair</span>
+              <span>Resistance</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="btc-power-law">
+          <div class="btc-formula">Price = 10<sup>-1.799</sup> × (Days ÷ 365.25)<sup>5.566</sup></div>
+          <div class="btc-stats">
+            <div class="btc-stat">
+              <div class="btc-stat-label">Support (0.5×)</div>
+              <div class="btc-stat-value support" id="btc-support">$--</div>
+            </div>
+            <div class="btc-stat">
+              <div class="btc-stat-label">Resistance (3×)</div>
+              <div class="btc-stat-value resistance" id="btc-resistance">$--</div>
+            </div>
+            <div class="btc-stat">
+              <div class="btc-stat-label">Fair Value</div>
+              <div class="btc-stat-value fair" id="btc-fair">$--</div>
+            </div>
+            <div class="btc-stat">
+              <div class="btc-stat-label">R² Fit</div>
+              <div class="btc-stat-value" id="btc-r2">0.951</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="btc-chart" id="btc-chart">
+          <canvas id="btc-canvas"></canvas>
+          <div class="btc-chart-crosshair" id="btc-crosshair">
+            <div class="btc-crosshair-v"></div>
+          </div>
+          <div class="btc-chart-tooltip" id="btc-tooltip">
+            <div class="btc-tooltip-date" id="btc-tooltip-date">Jan 1, 2025</div>
+            <div class="btc-tooltip-values">
+              <div class="btc-tooltip-value"><span class="btc-tooltip-dot resistance"></span><span id="btc-tooltip-resistance">$--</span></div>
+              <div class="btc-tooltip-value"><span class="btc-tooltip-dot fair"></span><span id="btc-tooltip-fair">$--</span></div>
+              <div class="btc-tooltip-value"><span class="btc-tooltip-dot support"></span><span id="btc-tooltip-support">$--</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="btc-milestones">
+          <div class="btc-milestone">
+            <div class="btc-milestone-price">$1<span class="unit">M</span></div>
+            <div class="btc-milestone-dates">
+              <div class="btc-milestone-row">
+                <span class="btc-milestone-dot earliest"></span>
+                <span class="btc-milestone-date" id="btc-m1-earliest">--</span>
+              </div>
+              <div class="btc-milestone-row">
+                <span class="btc-milestone-dot trend"></span>
+                <span class="btc-milestone-date" id="btc-m1-date">--</span>
+              </div>
+            </div>
+          </div>
+          <div class="btc-milestone">
+            <div class="btc-milestone-price">$10<span class="unit">M</span></div>
+            <div class="btc-milestone-dates">
+              <div class="btc-milestone-row">
+                <span class="btc-milestone-dot earliest"></span>
+                <span class="btc-milestone-date" id="btc-m10-earliest">--</span>
+              </div>
+              <div class="btc-milestone-row">
+                <span class="btc-milestone-dot trend"></span>
+                <span class="btc-milestone-date" id="btc-m10-date">--</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="btc-footer">
+        <div class="btc-credit">Model: <a href="https://b1m.io" target="_blank" rel="noopener noreferrer">b1m.io</a></div>
+        <div class="btc-days" id="btc-days">Day --</div>
+      </div>
+    </div>
+  </div>
+
   <main>
     <div class="container">
       <header>
@@ -1405,11 +2261,17 @@
     console.log(`
 %c👀 Oh, peeking under the hood?
 
-%cThis site was whispered into existence by Claude.
-The human occasionally said "nice."
+%cThis site was whispered into existence by Claude, and Reza occasionally said "Nice!"
+
+%c"There is no second ₿est."
+%c— Michael Saylor
+
+
     `,
     'font-size: 16px; font-weight: bold;',
-    'font-size: 12px; color: #888;'
+    'font-size: 12px; color: #888;',
+    'font-size: 14px; color: #f7931a; font-style: italic; margin-top: 10px;',
+    'font-size: 11px; color: #666;'
     );
 
     // Date/time in PST
@@ -1441,6 +2303,7 @@ The human occasionally said "nice."
 
     // Bitcoin price
     let lastBtcPrice = null;
+    let btcModalOpen = false;
     async function fetchBtcPrice() {
       try {
         const res = await fetch('https://api.coinbase.com/v2/prices/BTC-USD/spot');
@@ -1449,18 +2312,707 @@ The human occasionally said "nice."
         const priceEl = document.getElementById('btc-price');
         priceEl.textContent = `BTC: $${Math.round(price).toLocaleString()}`;
 
+        let flashClass = null;
         if (lastBtcPrice !== null && price !== lastBtcPrice) {
-          const flashClass = price > lastBtcPrice ? 'flash-green' : 'flash-red';
+          flashClass = price > lastBtcPrice ? 'flash-green' : 'flash-red';
           priceEl.classList.add(flashClass);
           setTimeout(() => priceEl.classList.remove(flashClass), 1000);
         }
         lastBtcPrice = price;
+
+        // Update modal if open and showing today
+        if (btcModalOpen && typeof updateBtcModal === 'function') {
+          updateBtcModal(flashClass);
+        }
       } catch (e) {
         document.getElementById('btc-price').textContent = 'BTC: --';
       }
     }
     fetchBtcPrice();
     setInterval(fetchBtcPrice, 30000);
+
+    // ===== BITCOIN POWER LAW MODAL =====
+    const btcOverlay = document.getElementById('btc-overlay');
+    const btcClose = document.getElementById('btc-close');
+    const btcModalPrice = document.getElementById('btc-modal-price');
+    const btcDeviation = document.getElementById('btc-deviation');
+    const btcSupport = document.getElementById('btc-support');
+    const btcResistance = document.getElementById('btc-resistance');
+    const btcFair = document.getElementById('btc-fair');
+    const btcDays = document.getElementById('btc-days');
+    const btcCanvas = document.getElementById('btc-canvas');
+    const btcPriceEl = document.getElementById('btc-price');
+    const btcDateDisplay = document.getElementById('btc-date-display');
+    const btcDatePrev = document.getElementById('btc-date-prev');
+    const btcDateNext = document.getElementById('btc-date-next');
+    const btcDateToday = document.getElementById('btc-date-today');
+    const btcCalendar = document.getElementById('btc-calendar');
+    const btcCalendarTitle = document.getElementById('btc-calendar-title');
+    const btcCalendarYear = document.getElementById('btc-calendar-year');
+    const btcCalendarDays = document.getElementById('btc-calendar-days');
+    const btcCalPrevMonth = document.getElementById('btc-cal-prev-month');
+    const btcCalNextMonth = document.getElementById('btc-cal-next-month');
+    const btcCalPrevYear = document.getElementById('btc-cal-prev-year');
+    const btcCalNextYear = document.getElementById('btc-cal-next-year');
+    const btcQuickYears = document.getElementById('btc-quick-years');
+    const btcRangeMarker = document.getElementById('btc-range-marker');
+    const btcPriceRange = document.getElementById('btc-price-range');
+    const btcChartEl = document.getElementById('btc-chart');
+    const btcTooltip = document.getElementById('btc-tooltip');
+    const btcCrosshair = document.getElementById('btc-crosshair');
+    const btcTooltipDate = document.getElementById('btc-tooltip-date');
+    const btcTooltipFair = document.getElementById('btc-tooltip-fair');
+    const btcTooltipSupport = document.getElementById('btc-tooltip-support');
+    const btcTooltipResistance = document.getElementById('btc-tooltip-resistance');
+
+    let btcSelectedDate = new Date();
+    let btcChartPadding = { left: 45, right: 15, top: 20, bottom: 25 };
+    let btcChartStartDays, btcChartEndDays, btcChartWidth, btcChartHeight;
+    let btcCalendarViewDate = new Date();
+
+    // Bitcoin genesis block: January 3, 2009
+    const GENESIS_DATE = new Date('2009-01-03T00:00:00Z');
+
+    // Power law constants from b1m.io model
+    // Formula: Price = 10^a × (Days/365.25)^b
+    // Using β = 5.566 and intercept calibrated to match b1m.io fair value ($112,618)
+    const POWER_LAW_EXPONENT = 5.566;
+    const POWER_LAW_LOG_INTERCEPT = -1.799;
+    const POWER_LAW_CONSTANT = Math.pow(10, POWER_LAW_LOG_INTERCEPT);
+    // Support at 0.5× fair value, Resistance at 3× fair value (per b1m.io bands)
+    const SUPPORT_MULTIPLIER = 0.5;
+    const RESISTANCE_MULTIPLIER = 3.0;
+
+    function getDaysSinceGenesis(date = new Date()) {
+      const diffTime = date - GENESIS_DATE;
+      return Math.floor(diffTime / (1000 * 60 * 60 * 24));
+    }
+
+    function getPowerLawPrice(days) {
+      const years = days / 365.25;
+      return POWER_LAW_CONSTANT * Math.pow(years, POWER_LAW_EXPONENT);
+    }
+
+    function getSupportPrice(days) {
+      const fairValue = getPowerLawPrice(days);
+      return fairValue * SUPPORT_MULTIPLIER;
+    }
+
+    function getResistancePrice(days) {
+      const fairValue = getPowerLawPrice(days);
+      return fairValue * RESISTANCE_MULTIPLIER;
+    }
+
+    function formatPrice(price) {
+      if (price >= 1000000) {
+        return '$' + (price / 1000000).toFixed(2) + 'M';
+      } else if (price >= 1000) {
+        return '$' + Math.round(price).toLocaleString();
+      }
+      return '$' + price.toFixed(2);
+    }
+
+    function updateBtcModal(flashClass = null) {
+      const days = getDaysSinceGenesis(btcSelectedDate);
+      const fairValue = getPowerLawPrice(days);
+      const support = getSupportPrice(days);
+      const resistance = getResistancePrice(days);
+      const isToday = isSameDay(btcSelectedDate, new Date());
+
+      // Update date display
+      updateBtcDateDisplay();
+
+      // Update displays based on selected date
+      if (isToday && lastBtcPrice) {
+        btcModalPrice.textContent = '$' + Math.round(lastBtcPrice).toLocaleString();
+
+        // Flash the modal price if there was a price change
+        if (flashClass) {
+          btcModalPrice.classList.add(flashClass);
+          setTimeout(() => btcModalPrice.classList.remove(flashClass), 1000);
+        }
+        // Calculate deviation from fair value
+        const deviation = ((lastBtcPrice - fairValue) / fairValue) * 100;
+        if (deviation >= 0) {
+          btcDeviation.textContent = `+${deviation.toFixed(1)}% above fair value`;
+          btcDeviation.className = 'btc-deviation above';
+        } else {
+          btcDeviation.textContent = `${deviation.toFixed(1)}% below fair value`;
+          btcDeviation.className = 'btc-deviation below';
+        }
+        document.querySelector('.btc-current-label').textContent = 'Current Price';
+      } else {
+        btcModalPrice.textContent = formatPrice(fairValue);
+        btcDeviation.textContent = 'Power Law Fair Value';
+        btcDeviation.className = 'btc-deviation';
+        document.querySelector('.btc-current-label').textContent = btcSelectedDate > new Date() ? 'Projected Fair Value' : 'Historical Fair Value';
+      }
+
+      btcFair.textContent = formatPrice(fairValue);
+      btcSupport.textContent = formatPrice(support);
+      btcResistance.textContent = formatPrice(resistance);
+      btcDays.textContent = `Day ${days.toLocaleString()}`;
+
+      // Update price range indicator
+      updatePriceRangeIndicator(isToday ? lastBtcPrice : fairValue, support, resistance, isToday);
+
+      // Render chart
+      renderChart();
+    }
+
+    function updatePriceRangeIndicator(price, support, resistance, showIndicator) {
+      if (!price || !showIndicator) {
+        btcPriceRange.style.opacity = '0.3';
+        btcRangeMarker.style.left = '50%';
+        btcRangeMarker.classList.remove('animate');
+        return;
+      }
+
+      btcPriceRange.style.opacity = '1';
+      btcRangeMarker.classList.add('animate');
+
+      // Calculate position: 0% = support, 50% = fair value, 100% = resistance
+      // Using log scale for better visualization
+      const logPrice = Math.log10(price);
+      const logSupport = Math.log10(support);
+      const logResistance = Math.log10(resistance);
+      const logFair = (logSupport + logResistance) / 2;
+
+      let percent;
+      if (price <= support) {
+        percent = 0;
+      } else if (price >= resistance) {
+        percent = 100;
+      } else if (price <= (support + resistance) / 2) {
+        // Below fair value: map support->fair to 0%->50%
+        percent = ((logPrice - logSupport) / (logFair - logSupport)) * 50;
+      } else {
+        // Above fair value: map fair->resistance to 50%->100%
+        percent = 50 + ((logPrice - logFair) / (logResistance - logFair)) * 50;
+      }
+
+      btcRangeMarker.style.left = `${Math.max(0, Math.min(100, percent))}%`;
+    }
+
+    function isSameDay(d1, d2) {
+      return d1.getFullYear() === d2.getFullYear() &&
+             d1.getMonth() === d2.getMonth() &&
+             d1.getDate() === d2.getDate();
+    }
+
+    function updateBtcDateDisplay() {
+      const today = new Date();
+      const isToday = isSameDay(btcSelectedDate, today);
+      if (isToday) {
+        btcDateDisplay.textContent = 'Today';
+        btcDateToday.classList.remove('visible');
+      } else {
+        const options = { month: 'short', day: 'numeric', year: 'numeric' };
+        btcDateDisplay.textContent = btcSelectedDate.toLocaleDateString('en-US', options);
+        btcDateToday.classList.add('visible');
+      }
+    }
+
+    function navigateBtcDate(delta) {
+      btcSelectedDate.setDate(btcSelectedDate.getDate() + delta);
+      updateBtcModal();
+    }
+
+    function renderBtcCalendar() {
+      const year = btcCalendarViewDate.getFullYear();
+      const month = btcCalendarViewDate.getMonth();
+
+      // Update year and month displays separately
+      btcCalendarYear.textContent = year;
+      btcCalendarTitle.textContent = btcCalendarViewDate.toLocaleDateString('en-US', { month: 'long' });
+
+      const firstDay = new Date(year, month, 1);
+      const lastDay = new Date(year, month + 1, 0);
+      const startPadding = firstDay.getDay();
+      const today = new Date();
+
+      let html = '';
+
+      // Previous month padding
+      const prevMonth = new Date(year, month, 0);
+      for (let i = startPadding - 1; i >= 0; i--) {
+        const day = prevMonth.getDate() - i;
+        html += `<div class="btc-calendar-day other-month" data-date="${year}-${month}-${day}">${day}</div>`;
+      }
+
+      // Current month days
+      for (let day = 1; day <= lastDay.getDate(); day++) {
+        const date = new Date(year, month, day);
+        const isToday = isSameDay(date, today);
+        const isSelected = isSameDay(date, btcSelectedDate);
+        let classes = 'btc-calendar-day';
+        if (isToday) classes += ' today';
+        if (isSelected) classes += ' selected';
+        html += `<div class="${classes}" data-date="${year}-${month + 1}-${day}">${day}</div>`;
+      }
+
+      // Next month padding
+      const remaining = 42 - (startPadding + lastDay.getDate());
+      for (let day = 1; day <= remaining; day++) {
+        html += `<div class="btc-calendar-day other-month" data-date="${year}-${month + 2}-${day}">${day}</div>`;
+      }
+
+      btcCalendarDays.innerHTML = html;
+
+      // Render quick year buttons (2020-2050 range for power law relevance)
+      const currentYear = new Date().getFullYear();
+      const quickYears = [2020, 2025, 2030, 2035, 2040, 2045, 2050];
+      btcQuickYears.innerHTML = quickYears.map(y => {
+        const isActive = y === year;
+        return `<button class="btc-quick-year${isActive ? ' active' : ''}" data-year="${y}">${y}</button>`;
+      }).join('');
+    }
+
+    function toggleBtcCalendar() {
+      btcCalendar.classList.toggle('active');
+      if (btcCalendar.classList.contains('active')) {
+        btcCalendarViewDate = new Date(btcSelectedDate);
+        renderBtcCalendar();
+      }
+    }
+
+    function renderChart() {
+      const ctx = btcCanvas.getContext('2d');
+      const rect = btcCanvas.parentElement.getBoundingClientRect();
+      const dpr = window.devicePixelRatio || 1;
+
+      btcCanvas.width = rect.width * dpr;
+      btcCanvas.height = rect.height * dpr;
+      ctx.scale(dpr, dpr);
+
+      const width = rect.width;
+      const height = rect.height;
+      const padding = { top: 20, right: 15, bottom: 30, left: 55 };
+
+      // Clear canvas
+      ctx.clearRect(0, 0, width, height);
+
+      // Chart area
+      const chartWidth = width - padding.left - padding.right;
+      const chartHeight = height - padding.top - padding.bottom;
+
+      // Store chart dimensions globally for tooltip
+      btcChartPadding = padding;
+      btcChartWidth = chartWidth;
+      btcChartHeight = chartHeight;
+
+      // LOG-LOG scale: both axes are logarithmic
+      // X-axis: log10(days since genesis)
+      // Y-axis: log10(price)
+      // Zoomed to 2020-2050 range
+      const startDays = getDaysSinceGenesis(new Date('2020-01-01'));  // ~4018 days
+      const endDays = getDaysSinceGenesis(new Date('2050-01-01'));    // ~14975 days
+      btcChartStartDays = startDays;
+      btcChartEndDays = endDays;
+      const currentDays = getDaysSinceGenesis();
+      const selectedDays = getDaysSinceGenesis(btcSelectedDate);
+      const logDaysMin = Math.log10(startDays);
+      const logDaysMax = Math.log10(endDays);
+
+      // Price range (log scale) - adjusted for 2020-2050 range
+      const minPrice = 1000;      // $1K floor
+      const maxPrice = 100000000; // $100M ceiling
+      const logPriceMin = Math.log10(minPrice);
+      const logPriceMax = Math.log10(maxPrice);
+
+      // Log-log scale functions
+      function xScale(days) {
+        const logDays = Math.log10(Math.max(days, startDays));
+        return padding.left + ((logDays - logDaysMin) / (logDaysMax - logDaysMin)) * chartWidth;
+      }
+
+      function yScale(price) {
+        const logPrice = Math.log10(Math.max(price, minPrice));
+        return padding.top + chartHeight - ((logPrice - logPriceMin) / (logPriceMax - logPriceMin)) * chartHeight;
+      }
+
+      // Draw grid lines
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.05)';
+      ctx.lineWidth = 1;
+
+      // Horizontal grid (price levels) - log scale for 2020-2050 range
+      [10000, 100000, 1000000, 10000000, 100000000].forEach(price => {
+        const y = yScale(price);
+        if (y >= padding.top && y <= height - padding.bottom) {
+          ctx.beginPath();
+          ctx.moveTo(padding.left, y);
+          ctx.lineTo(width - padding.right, y);
+          ctx.stroke();
+
+          ctx.fillStyle = 'rgba(255, 255, 255, 0.3)';
+          ctx.font = '9px monospace';
+          ctx.textAlign = 'right';
+          ctx.fillText(formatPrice(price), padding.left - 4, y + 3);
+        }
+      });
+
+      // Vertical grid at year boundaries
+      [2020, 2025, 2030, 2035, 2040, 2045, 2050].forEach(year => {
+        const d = getDaysSinceGenesis(new Date(`${year}-01-01`));
+        const x = xScale(d);
+        if (x >= padding.left && x <= width - padding.right) {
+          ctx.beginPath();
+          ctx.moveTo(x, padding.top);
+          ctx.lineTo(x, height - padding.bottom);
+          ctx.stroke();
+        }
+      });
+
+      // In log-log space, power law is a STRAIGHT LINE: log(P) = a + b*log(D)
+      // Draw support band (filled area between support and fair value)
+      ctx.fillStyle = 'rgba(34, 197, 94, 0.15)';
+      ctx.beginPath();
+      const steps = 100;
+      for (let i = 0; i <= steps; i++) {
+        const logD = logDaysMin + (i / steps) * (logDaysMax - logDaysMin);
+        const d = Math.pow(10, logD);
+        const x = xScale(d);
+        const y = yScale(getSupportPrice(d));
+        if (i === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+      }
+      for (let i = steps; i >= 0; i--) {
+        const logD = logDaysMin + (i / steps) * (logDaysMax - logDaysMin);
+        const d = Math.pow(10, logD);
+        const x = xScale(d);
+        const y = yScale(getPowerLawPrice(d));
+        ctx.lineTo(x, y);
+      }
+      ctx.closePath();
+      ctx.fill();
+
+      // Draw resistance band (filled area between fair value and resistance)
+      ctx.fillStyle = 'rgba(239, 68, 68, 0.1)';
+      ctx.beginPath();
+      for (let i = 0; i <= steps; i++) {
+        const logD = logDaysMin + (i / steps) * (logDaysMax - logDaysMin);
+        const d = Math.pow(10, logD);
+        const x = xScale(d);
+        const y = yScale(getPowerLawPrice(d));
+        if (i === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+      }
+      for (let i = steps; i >= 0; i--) {
+        const logD = logDaysMin + (i / steps) * (logDaysMax - logDaysMin);
+        const d = Math.pow(10, logD);
+        const x = xScale(d);
+        const y = yScale(getResistancePrice(d));
+        ctx.lineTo(x, y);
+      }
+      ctx.closePath();
+      ctx.fill();
+
+      // Draw support line (0.5×) - STRAIGHT LINE in log-log
+      ctx.strokeStyle = '#22c55e';
+      ctx.lineWidth = 1.5;
+      ctx.setLineDash([4, 4]);
+      ctx.beginPath();
+      ctx.moveTo(xScale(startDays), yScale(getSupportPrice(startDays)));
+      ctx.lineTo(xScale(endDays), yScale(getSupportPrice(endDays)));
+      ctx.stroke();
+
+      // Draw resistance line (3×) - STRAIGHT LINE in log-log
+      ctx.strokeStyle = '#ef4444';
+      ctx.beginPath();
+      ctx.moveTo(xScale(startDays), yScale(getResistancePrice(startDays)));
+      ctx.lineTo(xScale(endDays), yScale(getResistancePrice(endDays)));
+      ctx.stroke();
+
+      // Draw fair value line (power law) - STRAIGHT LINE in log-log space
+      ctx.strokeStyle = '#f7931a';
+      ctx.lineWidth = 2.5;
+      ctx.setLineDash([]);
+      ctx.beginPath();
+      ctx.moveTo(xScale(startDays), yScale(getPowerLawPrice(startDays)));
+      ctx.lineTo(xScale(endDays), yScale(getPowerLawPrice(endDays)));
+      ctx.stroke();
+
+      // Draw selected date marker (fair value point on the line)
+      if (selectedDays >= startDays && selectedDays <= endDays) {
+        const selectedFairValue = getPowerLawPrice(selectedDays);
+        const sx = xScale(selectedDays);
+        const sy = yScale(selectedFairValue);
+
+        // Draw vertical line for selected date
+        ctx.strokeStyle = 'rgba(196, 248, 100, 0.3)';
+        ctx.lineWidth = 1;
+        ctx.setLineDash([3, 3]);
+        ctx.beginPath();
+        ctx.moveTo(sx, padding.top);
+        ctx.lineTo(sx, height - padding.bottom);
+        ctx.stroke();
+
+        // Draw selected point on fair value line
+        ctx.setLineDash([]);
+        ctx.shadowColor = 'var(--accent)';
+        ctx.shadowBlur = 10;
+        ctx.fillStyle = 'var(--accent)';
+        ctx.beginPath();
+        ctx.arc(sx, sy, 6, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.shadowBlur = 0;
+
+        ctx.strokeStyle = '#fff';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.arc(sx, sy, 6, 0, Math.PI * 2);
+        ctx.stroke();
+      }
+
+      // Draw current price point (if today and we have price data)
+      const isToday = isSameDay(btcSelectedDate, new Date());
+      if (isToday && lastBtcPrice && currentDays >= startDays && currentDays <= endDays) {
+        const x = xScale(currentDays);
+        const y = yScale(lastBtcPrice);
+
+        // Draw horizontal line to show current price level
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.15)';
+        ctx.lineWidth = 1;
+        ctx.setLineDash([2, 2]);
+        ctx.beginPath();
+        ctx.moveTo(padding.left, y);
+        ctx.lineTo(width - padding.right, y);
+        ctx.stroke();
+
+        // Draw current price point
+        ctx.setLineDash([]);
+        ctx.shadowColor = '#f7931a';
+        ctx.shadowBlur = 8;
+        ctx.fillStyle = '#fff';
+        ctx.beginPath();
+        ctx.arc(x, y, 5, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.shadowBlur = 0;
+
+        ctx.strokeStyle = '#f7931a';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.arc(x, y, 5, 0, Math.PI * 2);
+        ctx.stroke();
+      }
+
+      // Year labels on X-axis
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.4)';
+      ctx.font = '9px monospace';
+      ctx.textAlign = 'center';
+      [2020, 2025, 2030, 2035, 2040, 2045, 2050].forEach(year => {
+        const d = getDaysSinceGenesis(new Date(`${year}-01-01`));
+        if (d >= startDays && d <= endDays) {
+          const x = xScale(d);
+          ctx.fillText(year.toString(), x, height - 10);
+        }
+      });
+
+      // Add "log-log" label
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.2)';
+      ctx.font = '8px monospace';
+      ctx.textAlign = 'right';
+      ctx.fillText('log-log scale', width - padding.right, padding.top + 10);
+    }
+
+    // Chart hover tooltip functionality
+    function handleChartHover(e) {
+      const rect = btcChartEl.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+
+      // Check if within chart area
+      if (x < btcChartPadding.left || x > rect.width - btcChartPadding.right ||
+          y < btcChartPadding.top || y > rect.height - btcChartPadding.bottom) {
+        btcTooltip.classList.remove('visible');
+        btcCrosshair.classList.remove('visible');
+        return;
+      }
+
+      // Convert x position to days (log scale)
+      const logDaysMin = Math.log10(btcChartStartDays);
+      const logDaysMax = Math.log10(btcChartEndDays);
+      const xRatio = (x - btcChartPadding.left) / btcChartWidth;
+      const logDays = logDaysMin + xRatio * (logDaysMax - logDaysMin);
+      const days = Math.pow(10, logDays);
+
+      // Calculate date from days
+      const hoverDate = new Date(GENESIS_DATE.getTime() + days * 24 * 60 * 60 * 1000);
+      const dateOptions = { month: 'short', day: 'numeric', year: 'numeric' };
+
+      // Get power law values
+      const fair = getPowerLawPrice(days);
+      const support = getSupportPrice(days);
+      const resistance = getResistancePrice(days);
+
+      // Update tooltip content
+      btcTooltipDate.textContent = hoverDate.toLocaleDateString('en-US', dateOptions);
+      btcTooltipFair.textContent = formatPrice(fair);
+      btcTooltipSupport.textContent = formatPrice(support);
+      btcTooltipResistance.textContent = formatPrice(resistance);
+
+      // Position tooltip (offset from cursor, keep within bounds)
+      let tooltipX = x + 15;
+      let tooltipY = y - 10;
+      const tooltipWidth = btcTooltip.offsetWidth;
+      const tooltipHeight = btcTooltip.offsetHeight;
+
+      if (tooltipX + tooltipWidth > rect.width - 10) {
+        tooltipX = x - tooltipWidth - 15;
+      }
+      if (tooltipY + tooltipHeight > rect.height - 10) {
+        tooltipY = rect.height - tooltipHeight - 10;
+      }
+      if (tooltipY < 10) tooltipY = 10;
+
+      btcTooltip.style.left = tooltipX + 'px';
+      btcTooltip.style.top = tooltipY + 'px';
+
+      // Position crosshair
+      btcCrosshair.querySelector('.btc-crosshair-v').style.left = x + 'px';
+
+      btcTooltip.classList.add('visible');
+      btcCrosshair.classList.add('visible');
+    }
+
+    function handleChartLeave() {
+      btcTooltip.classList.remove('visible');
+      btcCrosshair.classList.remove('visible');
+    }
+
+    btcChartEl.addEventListener('mousemove', handleChartHover);
+    btcChartEl.addEventListener('mouseleave', handleChartLeave);
+
+    // Calculate date when price reaches target
+    function getDateForPrice(targetPrice) {
+      const constant = Math.pow(10, POWER_LAW_LOG_INTERCEPT);
+      const years = Math.pow(targetPrice / constant, 1 / POWER_LAW_EXPONENT);
+      const days = years * 365.25;
+      return new Date(GENESIS_DATE.getTime() + days * 24 * 60 * 60 * 1000);
+    }
+
+    function formatMilestoneDate(date) {
+      return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+    }
+
+    function updateMilestones() {
+      // $1M on trendline (fair value)
+      const date1M = getDateForPrice(1000000);
+      document.getElementById('btc-m1-date').textContent = formatMilestoneDate(date1M);
+
+      // Earliest $1M (at 3× resistance)
+      const date1MEarliest = getDateForPrice(1000000 / RESISTANCE_MULTIPLIER);
+      document.getElementById('btc-m1-earliest').textContent = formatMilestoneDate(date1MEarliest);
+
+      // $10M on trendline
+      const date10M = getDateForPrice(10000000);
+      document.getElementById('btc-m10-date').textContent = formatMilestoneDate(date10M);
+
+      // Earliest $10M (at 3× resistance)
+      const date10MEarliest = getDateForPrice(10000000 / RESISTANCE_MULTIPLIER);
+      document.getElementById('btc-m10-earliest').textContent = formatMilestoneDate(date10MEarliest);
+    }
+
+    function openBtcModal() {
+      btcModalOpen = true;
+      btcOverlay.classList.add('active');
+      document.body.style.overflow = 'hidden';
+      btcSelectedDate = new Date(); // Reset to today
+      updateMilestones();
+      updateBtcModal();
+    }
+
+    function closeBtcModal() {
+      btcModalOpen = false;
+      btcOverlay.classList.remove('active');
+      document.body.style.overflow = '';
+      btcCalendar.classList.remove('active');
+    }
+
+    // BTC Modal event listeners
+    btcPriceEl.addEventListener('click', openBtcModal);
+    btcClose.addEventListener('click', closeBtcModal);
+    btcOverlay.addEventListener('click', (e) => {
+      if (e.target === btcOverlay) closeBtcModal();
+    });
+
+    // Date picker navigation
+    btcDatePrev.addEventListener('click', () => navigateBtcDate(-1));
+    btcDateNext.addEventListener('click', () => navigateBtcDate(1));
+    btcDateToday.addEventListener('click', () => {
+      btcSelectedDate = new Date();
+      updateBtcModal();
+    });
+
+    // Calendar toggle
+    btcDateDisplay.addEventListener('click', toggleBtcCalendar);
+    btcCalPrevMonth.addEventListener('click', (e) => {
+      e.stopPropagation();
+      btcCalendarViewDate.setMonth(btcCalendarViewDate.getMonth() - 1);
+      renderBtcCalendar();
+    });
+    btcCalNextMonth.addEventListener('click', (e) => {
+      e.stopPropagation();
+      btcCalendarViewDate.setMonth(btcCalendarViewDate.getMonth() + 1);
+      renderBtcCalendar();
+    });
+
+    // Year navigation
+    btcCalPrevYear.addEventListener('click', (e) => {
+      e.stopPropagation();
+      btcCalendarViewDate.setFullYear(btcCalendarViewDate.getFullYear() - 1);
+      renderBtcCalendar();
+    });
+    btcCalNextYear.addEventListener('click', (e) => {
+      e.stopPropagation();
+      btcCalendarViewDate.setFullYear(btcCalendarViewDate.getFullYear() + 1);
+      renderBtcCalendar();
+    });
+
+    // Quick year buttons
+    btcQuickYears.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const btn = e.target.closest('.btc-quick-year');
+      if (btn && btn.dataset.year) {
+        const targetYear = parseInt(btn.dataset.year);
+        btcCalendarViewDate.setFullYear(targetYear);
+        btcCalendarViewDate.setMonth(0); // Set to January of that year
+        btcCalendarViewDate.setDate(1);
+        renderBtcCalendar();
+      }
+    });
+
+    // Calendar day click
+    btcCalendarDays.addEventListener('click', (e) => {
+      const day = e.target.closest('.btc-calendar-day');
+      if (day && day.dataset.date) {
+        const [year, month, dayNum] = day.dataset.date.split('-').map(Number);
+        btcSelectedDate = new Date(year, month - 1, dayNum);
+        btcCalendar.classList.remove('active');
+        updateBtcModal();
+      }
+    });
+
+    // Close calendar when clicking outside
+    document.addEventListener('click', (e) => {
+      if (!e.target.closest('.btc-calendar-wrapper')) {
+        btcCalendar.classList.remove('active');
+      }
+    });
+
+    // ESC key closes BTC modal too
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && btcOverlay.classList.contains('active')) {
+        closeBtcModal();
+      }
+    });
+
+    // Resize handler for chart
+    window.addEventListener('resize', () => {
+      if (btcOverlay.classList.contains('active')) {
+        renderChart();
+      }
+    });
 
     // ===== TIME ZONE CONVERTER =====
     const tzOverlay = document.getElementById('tz-overlay');
@@ -2759,6 +4311,11 @@ The human occasionally said "nice."
           const cityMonth = cityTime.getMonth() + 1;
           const cityDate = cityTime.getDate();
           const cityDayWithDate = `${cityDay} ${cityMonth}/${cityDate}`;
+
+          // Always show today's date at position 0 (first hour / 12 AM row) - only for home city
+          if (h === 0 && city.isHome) {
+            dayMarkers.push({ position: 0, day: cityDayWithDate });
+          }
 
           // Check if this is where day changes (only check at hour boundaries)
           if (h > 0) {
